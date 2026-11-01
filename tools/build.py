@@ -34,14 +34,14 @@ footer .wrap{padding-top:20px;padding-bottom:28px;display:flex;flex-wrap:wrap;ga
 footer a{color:var(--muted)}
 .legal h2{font-size:19px}.legal{max-width:680px}
 """
-def page(path, title, body, active="/"):
+def page(path, title, body, active="/", pre="", extra_head=""):
     nav = "".join(f'<a href="{h}"{" class=on" if h==active else ""}>{t}</a>' for h,t in NAV)
     html = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{title}</title><link rel="stylesheet" href="/assets/style.css"></head>
+<title>{title}</title><link rel="stylesheet" href="/assets/style.css">{extra_head}</head>
 <body><header><div class="wrap"><a class="brand" href="/">wasabi<span>ari</span></a><nav>{nav}</nav></div></header>
-<main><div class="wrap">{body}</div></main>
-<footer><div class="wrap"><span>&copy; 2026 Wasabi Entertainment</span><a href="/support/">Contact &amp; Support</a><a href="/micro-mayhem/privacy/">Micro Mayhem privacy</a><a href="/for-the-waves/privacy/">For the Waves privacy</a></div></footer>
+{pre}<main><div class="wrap">{body}</div></main>
+<footer><div class="wrap"><span>&copy; 2026 Wasabi Entertainment</span><a href="/support/">Contact &amp; Support</a><a href="/micro-mayhem/privacy/">Micro Mayhem privacy</a><a href="/for-the-waves/privacy/">For the Waves privacy</a><a href="/tetris-beats/privacy/">Tetris Beats privacy</a></div></footer>
 </body></html>
 """
     d = os.path.join(OUT, path.strip("/"))
@@ -60,25 +60,28 @@ def privacy(slug, game):
 <h2>Changes</h2><p>If this ever changes, for example if online features are added, we will update this page and the date above before the change ships.</p>
 <h2>Contact</h2><p>Questions? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a>.</p></div>"""
 
-page("/", "wasabiari", """<span class="tag">Boston, MA</span><h1>Games, tools and things I make.</h1>
-<p class="lede">Home of Wasabi Entertainment and my other projects. Built by Ivan.</p>
-<a class="btn" href="/projects/">See the projects</a><a class="btn ghost" href="/support/">Get support</a>
+HOME_PRE = open(os.path.join(os.path.dirname(__file__), "home-web.html")).read()
+page("/", "wasabiari", """<h2 style="margin-top:0">Everything in one place</h2>
+<p class="lede">Home of Wasabi Entertainment and my other projects. Built by Ivan in Boston.</p>
 <div class="grid">
 <a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem</h3><p>DRAFT: one line about the game.</p></a>
 <a class="card" href="/for-the-waves/"><span class="tag">In development</span><h3>For the Waves</h3><p>DRAFT: one line about the game.</p></a>
+<a class="card" href="/tetris-beats/"><span class="tag">In development</span><h3>Tetris Beats</h3><p>DRAFT: one line about the game.</p></a>
 <a class="card" href="/inkbleed/"><span class="tag">Coming soon</span><h3>InkBleed</h3><p>A creative studio for comics, art, video and sound.</p></a>
-</div>""")
+</div>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script>')
 page("/projects/", "Projects · wasabiari", """<h1>Projects</h1><p class="lede">Everything I'm building, in one place.</p>
 <h2>Wasabi Entertainment</h2><p>My games label.</p><div class="grid">
 <a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem</h3><p>DRAFT: one line about the game.</p></a>
-<a class="card" href="/for-the-waves/"><span class="tag">In development</span><h3>For the Waves</h3><p>DRAFT: one line about the game.</p></a></div>
+<a class="card" href="/for-the-waves/"><span class="tag">In development</span><h3>For the Waves</h3><p>DRAFT: one line about the game.</p></a>
+<a class="card" href="/tetris-beats/"><span class="tag">In development</span><h3>Tetris Beats</h3><p>DRAFT: one line about the game.</p></a></div>
 <h2>Other projects</h2><div class="grid">
 <a class="card" href="/inkbleed/"><span class="tag">Coming soon</span><h3>InkBleed</h3><p>A creative studio for comics, art, video and sound.</p></a></div>""", "/projects/")
 page("/wasabi-entertainment/", "Wasabi Entertainment", """<div class="crumbs"><a href="/projects/">Projects</a> / Wasabi Entertainment</div>
 <h1>Wasabi Entertainment</h1><p class="lede">Small games with big personality, made in Boston. Named after Wasabi.</p><div class="grid">
 <a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem</h3><p>DRAFT: one line about the game.</p></a>
-<a class="card" href="/for-the-waves/"><span class="tag">In development</span><h3>For the Waves</h3><p>DRAFT: one line about the game.</p></a></div>""", "/projects/")
-for slug, game, status in [("micro-mayhem","Micro Mayhem","Coming to the App Store"),("for-the-waves","For the Waves","In development")]:
+<a class="card" href="/for-the-waves/"><span class="tag">In development</span><h3>For the Waves</h3><p>DRAFT: one line about the game.</p></a>
+<a class="card" href="/tetris-beats/"><span class="tag">In development</span><h3>Tetris Beats</h3><p>DRAFT: one line about the game.</p></a></div>""", "/projects/")
+for slug, game, status in [("micro-mayhem","Micro Mayhem","Coming to the App Store"),("for-the-waves","For the Waves","In development"),("tetris-beats","Tetris Beats","In development")]:
     page(f"/{slug}/", f"{game} · Wasabi Entertainment", f"""<div class="crumbs"><a href="/projects/">Projects</a> / <a href="/wasabi-entertainment/">Wasabi Entertainment</a> / {game}</div>
 <span class="tag{' live' if 'App' in status else ''}">{status}</span><h1>{game}</h1>
 <p class="lede">DRAFT: two sentences about the game go here, from Ivan.</p>
@@ -95,7 +98,7 @@ page("/about/", "About · wasabiari", """<h1>About</h1><p class="lede">I'm Ivan,
 page("/support/", "Contact & Support · wasabiari", """<h1>Contact &amp; Support</h1><p class="lede">Questions, bugs, or ideas about any of my games or projects? I read every message.</p>
 <a class="btn" href="mailto:support@wasabiari.com">Email support@wasabiari.com</a>
 <h2>When you write about a bug</h2><p>Tell me which game, what you were doing, and your iPhone model. A screenshot helps a lot.</p>
-<h2>Privacy policies</h2><p><a href="/micro-mayhem/privacy/">Micro Mayhem</a> · <a href="/for-the-waves/privacy/">For the Waves</a></p>
+<h2>Privacy policies</h2><p><a href="/micro-mayhem/privacy/">Micro Mayhem</a> · <a href="/for-the-waves/privacy/">For the Waves</a> · <a href="/tetris-beats/privacy/">Tetris Beats</a></p>
 <p>I usually reply within a few days.</p>""", "/support/")
 os.makedirs(os.path.join(OUT,"assets"), exist_ok=True)
 open(os.path.join(OUT,"assets/style.css"),"w").write(CSS)
