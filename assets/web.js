@@ -1,7 +1,7 @@
 (() => {
   const sec = document.getElementById('web'), stage = document.getElementById('stage');
   const svg = document.getElementById('lines'), head = document.getElementById('head');
-  const hello = document.getElementById('hello'), hint = document.getElementById('hint');
+  const hello = document.getElementById('hello'), hint = document.getElementById('hint'), tag = document.getElementById('tagline');
   const nodes = [...stage.querySelectorAll('.node')];
   const byId = {}; nodes.forEach(n => byId[n.dataset.id] = n);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -46,8 +46,9 @@
     const range = sec.offsetHeight - stage.clientHeight;
     const p = reduce ? 1 : clamp((scrollY - sec.offsetTop) / (range || 1));
     const h = ease(clamp(p / 0.3));
-    const x = W * 0.5, y = H * 0.5 + (headEnd.y - H * 0.5) * h, s = 1 + (headEnd.s - 1) * h;
+    const y0 = H * 0.42; const x = W * 0.5, y = y0 + (headEnd.y - y0) * h, s = 1 + (headEnd.s - 1) * h;
     head.style.transform = `translate(${x - W / 2}px, ${y - H / 2}px) translate(-50%,-50%) scale(${s})`;
+    if (tag) tag.style.opacity = 1 - clamp(p / 0.15);
     head.style.left = '50%'; head.style.top = '50%';
     hello.style.opacity = 1 - clamp(p / 0.15);
     hint.style.opacity = 1 - clamp(p / 0.1);

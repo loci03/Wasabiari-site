@@ -1,29 +1,28 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>wasabiari mock C · Night Arcade</title>
+<title>wasabiari mock 4 · Night Arcade</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/web.css"><style>*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--font)}
 a{color:var(--wasabi)}
 .wrap{max-width:920px;margin:0 auto;padding:0 16px}
-header{position:relative;z-index:5;border-bottom:1px solid var(--line);background:var(--bg)}
+header{position:absolute;top:0;left:0;right:0;z-index:5}
 header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding-top:12px;padding-bottom:12px}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--hfont);font-weight:800;font-size:22px;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
 .brand img{width:40px;height:40px;border-radius:50%;box-shadow:0 0 0 2px var(--acc)}
 .brand span{color:var(--wasabi)} .brand small{display:block;font-family:var(--font);font-size:10px;letter-spacing:.24em;color:var(--muted);font-weight:700;margin-top:-2px}
-nav a{color:var(--muted);text-decoration:none;margin-left:14px;font-size:15px} nav a:first-child{margin-left:0}
+nav a{color:var(--muted);text-decoration:none;margin-left:14px;font-size:15px;display:inline-block;padding:12px 0} nav a:first-child{margin-left:0}
 main{padding:40px 0 64px} h1,h2,h3{font-family:var(--hfont)} h2{font-size:26px}
 .lede{color:var(--muted)} .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:20px}
 .card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;text-decoration:none;color:var(--ink)}
-.card h3{margin:0 0 4px}.card p{margin:0;color:var(--muted);font-size:15px}
+.card h3{margin:0 0 4px}.card .pv{display:inline-block;margin-top:8px;font-size:14px;padding:6px 0}.legal{margin-top:28px;font-size:15px;color:var(--muted)}.legal a{display:inline-block;padding:8px 0;margin-right:16px}.card p{margin:0;color:var(--muted);font-size:15px}
 .label{position:fixed;right:10px;bottom:10px;z-index:9;background:#000;color:#fff;font:600 12px system-ui;padding:6px 10px;border-radius:8px;opacity:.75}
 
-:root{--bg:#090d08;--panel:#111a0f;--ink:#eaf7dc;--muted:#93a888;--wasabi:#b6ff4d;--acc:#b6ff4d;--line:#22301d;--font:'Space Grotesk',system-ui,sans-serif;--hfont:'Space Grotesk',system-ui,sans-serif}
-body{background-image:linear-gradient(rgba(182,255,77,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(182,255,77,.05) 1px,transparent 1px);background-size:32px 32px}
-.head{box-shadow:0 0 0 6px var(--bg),0 0 0 9px var(--acc),0 0 60px rgba(182,255,77,.45)}
-.lines path{stroke:var(--acc);filter:drop-shadow(0 0 4px rgba(182,255,77,.8))}
-.node{border-radius:10px;border:1.5px solid var(--acc);background:rgba(17,26,15,.9);box-shadow:0 0 18px rgba(182,255,77,.25);text-transform:uppercase;letter-spacing:.04em;font-size:13px}
+:root{--bg:#090d08;--panel:#111a0f;--ink:#eaf7dc;--muted:#a3b898;--wasabi:#b6ff4d;--acc:#b6ff4d;--line:#22301d;--font:'Space Grotesk',system-ui,sans-serif;--hfont:'Space Grotesk',system-ui,sans-serif}
+body{background-image:linear-gradient(rgba(182,255,77,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(182,255,77,.025) 1px,transparent 1px);background-size:32px 32px}
+.head{box-shadow:0 0 0 6px var(--bg),0 0 0 9px var(--acc),0 0 50px rgba(182,255,77,.3)}
+.lines path{stroke:var(--acc);stroke-width:2;opacity:.9}
+.node{border-radius:10px;border:1.5px solid var(--acc);background:#111a0f;font-size:15px;font-weight:700} .node small{font-size:12px}
 .node.big{background:var(--acc);color:#0b1407}
-.hello span,.brand span{color:var(--acc)}
 </style><script defer src="/assets/web.js"></script>
 <link rel="icon" href="/assets/ari-face.jpg"></head><body>
 <header><div class="wrap"><a class="brand" href="#"><img src="/assets/ari-face.jpg" alt=""><span style="color:inherit">wasabi<span>ari</span><small>WASABI ENTERTAINMENT</small></span></a>
@@ -31,17 +30,18 @@ body{background-image:linear-gradient(rgba(182,255,77,.05) 1px,transparent 1px),
 <section class="web" id="web" aria-label="Everything Ivan makes">
   <div class="stage" id="stage">
     <svg class="lines" id="lines" aria-hidden="true"></svg>
-    <div class="head" id="head"><img src="/assets/ari-duo.jpg" alt="Cartoon portrait of Ariel"></div>
+    <div class="head" id="head"><img src="/assets/ari-head.jpg" alt="Cartoon portrait of Ariel"></div>
     <p class="hello" id="hello">wasabi<span>ari</span></p>
+    <p class="tagline" id="tagline">Ivan's family games &amp; projects</p>
     <p class="hint" id="hint">Scroll</p>
-    <a class="node" data-id="inkbleed" data-from="head" data-p="18,38" data-l="20,32" href="/inkbleed/">InkBleed<small>Coming soon</small></a>
+    <a class="node proj" data-id="inkbleed" data-from="head" data-p="18,38" data-l="20,32" href="/inkbleed/">InkBleed<small>Coming soon</small></a>
     <a class="node big" data-id="wasabi" data-from="head" data-p="50,52" data-l="50,55" href="/wasabi-entertainment/">Wasabi<br>Entertainment</a>
     <a class="node" data-id="about" data-from="head" data-p="82,38" data-l="80,32" href="/about/">About</a>
-    <a class="node" data-id="support" data-from="about" data-p="82,58" data-l="82,54" href="/support/">Contact &amp; Support</a>
-    <a class="node" data-id="micro" data-from="wasabi" data-p="20,74" data-l="30,80" href="/micro-mayhem/">Micro Mayhem<small>App Store soon</small></a>
-    <a class="node" data-id="waves" data-from="wasabi" data-p="50,84" data-l="50,88" href="/for-the-waves/">For the Waves</a>
-    <a class="node" data-id="tetris" data-from="wasabi" data-p="80,74" data-l="70,80" href="/tetris-beats/">Tetris Beats</a>
+    <a class="node" data-id="support" data-from="about" data-p="82,62" data-l="82,54" href="/support/">Contact &amp; Support</a>
+    <a class="node proj" data-id="micro" data-from="wasabi" data-p="20,74" data-l="30,80" href="/micro-mayhem/">Micro Mayhem<small>App Store soon</small></a>
+    <a class="node proj" data-id="waves" data-from="wasabi" data-p="50,84" data-l="50,88" href="/for-the-waves/">For the Waves</a>
+    <a class="node proj" data-id="tetris" data-from="wasabi" data-p="80,74" data-l="70,80" href="/tetris-beats/">Tetris Beats</a>
   </div>
 </section>
-<main><div class="wrap"><h2>Everything in one place</h2><p class="lede">Home of Wasabi Entertainment and Ivan's other projects.</p><div class="grid"><a class="card" href="#"><h3>Micro Mayhem</h3><p>Coming to the App Store</p></a><a class="card" href="#"><h3>For the Waves</h3><p>In development</p></a><a class="card" href="#"><h3>Tetris Beats</h3><p>In development</p></a><a class="card" href="#"><h3>InkBleed</h3><p>Coming soon</p></a></div></div></main>
-<div class="label">C · Night Arcade</div></body></html>
+<main><div class="wrap"><h2>Everything in one place</h2><p class="lede">Home of Wasabi Entertainment and Ivan's other projects.</p><div class="grid"><div class="card"><h3>Micro Mayhem</h3><p>Coming to the App Store</p><a class="pv" href="#">Privacy</a></div><div class="card"><h3>For the Waves</h3><p>In development</p><a class="pv" href="#">Privacy</a></div><div class="card"><h3>Tetris Beats</h3><p>In development</p><a class="pv" href="#">Privacy</a></div><div class="card"><h3>InkBleed</h3><p>Coming soon</p></div></div><p class="legal"><a href="#">Contact &amp; Support</a><a href="#">Micro Mayhem privacy</a><a href="#">For the Waves privacy</a></p></div></main>
+<div class="label">4 · Night Arcade</div></body></html>
