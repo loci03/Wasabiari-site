@@ -2,46 +2,56 @@ import os, sys
 OUT = sys.argv[1]
 NAV = [("/", "Home"), ("/projects/", "Projects"), ("/about/", "About"), ("/support/", "Contact & Support")]
 CSS = """
-:root{--bg:#0f1410;--panel:#172019;--ink:#eef3ea;--muted:#a9b8a6;--wasabi:#9bd34a;--wasabi-deep:#6fa52a;--line:#2a372b}
-@media (prefers-color-scheme: light){:root{--bg:#f7faf3;--panel:#ffffff;--ink:#17201a;--muted:#55654f;--wasabi:#5f9a1c;--wasabi-deep:#4a7c12;--line:#dde6d4}}
+:root{--bg:#fff6e6;--panel:#ffffff;--ink:#1b1b1b;--muted:#5d5548;--wasabi:#4f8f12;--acc:#9bd34a;--lilac:#c9a8f2;--line:#efe2c8;
+  --font:'Inter',system-ui,-apple-system,sans-serif;--hfont:'Fredoka',system-ui,sans-serif}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-a{color:var(--wasabi)}a:hover{color:var(--wasabi-deep)}
-.wrap{max-width:880px;margin:0 auto;padding:0 20px}
-header{border-bottom:1px solid var(--line)}
-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding-top:16px;padding-bottom:16px}
-.brand{font-weight:800;font-size:20px;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
-.brand span{color:var(--wasabi)}
-nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:15px}
-nav a:first-child{margin-left:0}
-nav a.on,nav a:hover{color:var(--ink)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--font)}
+a{color:var(--wasabi);font-weight:600}a:hover{color:var(--ink)}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px}
+header{position:relative;z-index:5;background:var(--bg);border-bottom:3px solid var(--ink)}
+body.home header{position:absolute;top:0;left:0;right:0;background:transparent;border-bottom:0}
+header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 14px;padding-top:10px;padding-bottom:10px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+.brand img{width:42px;height:42px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 0 0 4px var(--ink),3px 3px 0 4px var(--lilac)}
+.brand b{display:block;font-family:var(--hfont);font-weight:700;font-size:23px;line-height:1.05;letter-spacing:-.01em}
+.brand b span{color:var(--wasabi)}
+.brand small{display:block;font-size:10px;letter-spacing:.24em;color:var(--muted);font-weight:700}
+nav{display:flex;flex-wrap:wrap;gap:0 16px}
+nav a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:600;display:inline-block;padding:11px 0}
+nav a.on,nav a:hover{color:var(--ink);text-decoration:underline;text-decoration-thickness:3px;text-decoration-color:var(--acc);text-underline-offset:5px}
 main{padding:40px 0 64px}
-h1{font-size:clamp(30px,6vw,46px);line-height:1.1;margin:0 0 12px;letter-spacing:-.02em}
-h2{font-size:22px;margin:36px 0 10px}
+h1,h2,h3{font-family:var(--hfont);font-weight:700}
+h1{font-size:clamp(32px,7vw,50px);line-height:1.08;margin:0 0 12px}
+h2{font-size:24px;margin:36px 0 10px}
 .lede{font-size:19px;color:var(--muted);max-width:620px}
-.crumbs{font-size:14px;color:var(--muted);margin-bottom:14px}.crumbs a{color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:24px}
-.card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;text-decoration:none;color:var(--ink)}
-.card:hover{border-color:var(--wasabi)}
-.card h3{margin:0 0 6px;font-size:19px}.card p{margin:0;color:var(--muted);font-size:15px}
-.tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:3px 8px;border-radius:999px;background:var(--line);color:var(--muted);margin-bottom:10px}
-.tag.live{background:var(--wasabi);color:#0f1410}
-.btn{display:inline-block;background:var(--wasabi);color:#0f1410;font-weight:700;padding:12px 18px;border-radius:10px;text-decoration:none;margin:8px 8px 0 0}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.note{background:var(--panel);border:1px dashed var(--wasabi);border-radius:10px;padding:12px 14px;color:var(--muted);font-size:15px}
-footer{border-top:1px solid var(--line);color:var(--muted);font-size:14px}
-footer .wrap{padding-top:20px;padding-bottom:28px;display:flex;flex-wrap:wrap;gap:6px 18px}
-footer a{color:var(--muted)}
-.legal h2{font-size:19px}.legal{max-width:680px}
+.crumbs{font-size:14px;color:var(--muted);margin-bottom:14px}.crumbs a{color:var(--muted);display:inline-block;padding:6px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;margin-top:24px}
+.card{display:block;background:var(--panel);border:3px solid var(--ink);border-radius:18px;padding:18px;color:var(--ink);box-shadow:4px 4px 0 var(--ink);transition:transform .12s,box-shadow .12s}
+a.card{text-decoration:none}a.card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.card.proj{background:#f4ecff}
+.card h3{margin:0 0 4px;font-size:21px}.card h3 a{color:var(--ink);text-decoration:none}
+.card p{margin:0;color:var(--muted);font-size:15px}
+.card .pv{display:inline-block;margin-top:8px;font-size:14px;padding:6px 0}
+.tag{display:inline-block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:999px;border:2px solid var(--ink);background:#fff;color:var(--ink);margin-bottom:10px}
+.tag.live{background:var(--acc)}
+.btn{display:inline-block;background:var(--acc);color:var(--ink);font-family:var(--hfont);font-weight:700;font-size:18px;padding:12px 20px;border-radius:14px;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);text-decoration:none;margin:8px 10px 0 0}
+.btn.ghost{background:#fff}
+.note{background:#fff;border:2px dashed var(--ink);border-radius:12px;padding:12px 14px;color:var(--muted);font-size:15px}
+.links{margin-top:28px;font-size:15px}.links a{display:inline-block;padding:8px 0;margin-right:18px}
+footer{border-top:3px solid var(--ink);color:var(--muted);font-size:14px;background:#fff}
+footer .wrap{padding-top:14px;padding-bottom:22px;display:flex;flex-wrap:wrap;gap:0 18px;align-items:center}
+footer a{color:var(--muted);display:inline-block;padding:8px 0}
+.legal{max-width:680px}.legal h2{font-size:20px}
 """
+FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">'
 def page(path, title, body, active="/", pre="", extra_head=""):
     nav = "".join(f'<a href="{h}"{" class=on" if h==active else ""}>{t}</a>' for h,t in NAV)
     html = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{title}</title><link rel="stylesheet" href="/assets/style.css">{extra_head}</head>
-<body><header><div class="wrap"><a class="brand" href="/">wasabi<span>ari</span></a><nav>{nav}</nav></div></header>
+<title>{title}</title>{FONTS}<link rel="stylesheet" href="/assets/style.css"><link rel="icon" href="/assets/ari-face.jpg"><link rel="apple-touch-icon" href="/assets/ari-face.jpg">{extra_head}</head>
+<body{' class="home"' if pre else ''}><header><div class="wrap"><a class="brand" href="/"><img src="/assets/ari-face.jpg" alt=""><span><b>wasabi<span>ari</span></b><small>WASABI ENTERTAINMENT</small></span></a><nav>{nav}</nav></div></header>
 {pre}<main><div class="wrap">{body}</div></main>
-<footer><div class="wrap"><span>&copy; 2026 Wasabi Entertainment</span><a href="/support/">Contact &amp; Support</a><a href="/micro-mayhem/privacy/">Micro Mayhem privacy</a><a href="/for-the-waves/privacy/">For the Waves privacy</a><a href="/tetris-beats/privacy/">Tetris Beats privacy</a></div></footer>
+<footer><div class="wrap"><span>&copy; 2026 Wasabi Entertainment &middot; Boston, MA</span><a href="/support/">Contact &amp; Support</a><a href="/micro-mayhem/privacy/">Micro Mayhem privacy</a><a href="/for-the-waves/privacy/">For the Waves privacy</a><a href="/tetris-beats/privacy/">Tetris Beats privacy</a></div></footer>
 </body></html>
 """
     d = os.path.join(OUT, path.strip("/"))
@@ -61,14 +71,15 @@ def privacy(slug, game):
 <h2>Contact</h2><p>Questions? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a>.</p></div>"""
 
 HOME_PRE = open(os.path.join(os.path.dirname(__file__), "home-web.html")).read()
-page("/", "wasabiari", """<h2 style="margin-top:0">Everything in one place</h2>
-<p class="lede">Home of Wasabi Entertainment and my other projects. Built by Ivan in Boston.</p>
+page("/", "wasabiari · Wasabi Entertainment", """<h2 style="margin-top:0">Everything in one place</h2>
+<p class="lede">Home of Wasabi Entertainment and Ivan's other projects, made in Boston.</p>
 <div class="grid">
-<a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem</h3><p>DRAFT: one line about the game.</p></a>
-<a class="card" href="/for-the-waves/"><span class="tag">In development</span><h3>For the Waves</h3><p>DRAFT: one line about the game.</p></a>
-<a class="card" href="/tetris-beats/"><span class="tag">In development</span><h3>Tetris Beats</h3><p>DRAFT: one line about the game.</p></a>
+<div class="card proj"><span class="tag live">Coming to the App Store</span><h3><a href="/micro-mayhem/">Micro Mayhem</a></h3><p>DRAFT: one line about the game.</p><a class="pv" href="/micro-mayhem/privacy/">Privacy</a></div>
+<div class="card proj"><span class="tag">In development</span><h3><a href="/for-the-waves/">For the Waves</a></h3><p>DRAFT: one line about the game.</p><a class="pv" href="/for-the-waves/privacy/">Privacy</a></div>
+<div class="card proj"><span class="tag">In development</span><h3><a href="/tetris-beats/">Tetris Beats</a></h3><p>DRAFT: one line about the game.</p><a class="pv" href="/tetris-beats/privacy/">Privacy</a></div>
 <a class="card" href="/inkbleed/"><span class="tag">Coming soon</span><h3>InkBleed</h3><p>A creative studio for comics, art, video and sound.</p></a>
-</div>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script>')
+</div>
+<p class="links"><a href="/support/">Contact &amp; Support</a><a href="/about/">About</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script>')
 page("/projects/", "Projects · wasabiari", """<h1>Projects</h1><p class="lede">Everything I'm building, in one place.</p>
 <h2>Wasabi Entertainment</h2><p>My games label.</p><div class="grid">
 <a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem</h3><p>DRAFT: one line about the game.</p></a>
