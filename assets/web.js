@@ -3,7 +3,6 @@
   const svg = document.getElementById('lines'), head = document.getElementById('head');
   const hello = document.getElementById('hello'), hint = document.getElementById('hint'), tag = document.getElementById('tagline');
   const nodes = [...stage.querySelectorAll('.node')];
-  const flairs = [...stage.querySelectorAll('.flair')];  // flair.js layers ride along with the head
   const byId = {}; nodes.forEach(n => byId[n.dataset.id] = n);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -50,7 +49,6 @@
     const h = ease(clamp(p / 0.3));
     const y0 = H * 0.42; const x = W * 0.5, y = y0 + (headEnd.y - y0) * h, s = 1 + (headEnd.s - 1) * h;
     head.style.transform = `translate(${x - W / 2}px, ${y - H / 2}px) translate(-50%,-50%) scale(${s})`;
-    flairs.forEach(f => f.style.transform = head.style.transform);
     if (tag) tag.style.opacity = 1 - clamp(p / 0.15);
     head.style.left = '50%'; head.style.top = '50%';
     hello.style.opacity = 1 - clamp(p / 0.15);

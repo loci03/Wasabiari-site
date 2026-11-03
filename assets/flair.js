@@ -1,6 +1,7 @@
-// Flair around Ariel's portrait on the home page. Each visit picks a different set
-// (butterflies, fairies, pizza, lightbulbs, ...); tapping her portrait shows the next one.
-// The official logo itself never changes: this only adds things flying around it.
+// Flair around Ariel's head, inside her portrait on the home page. Each visit picks a different
+// set (butterflies, fairies, pizza, lightbulbs, ...); tapping her portrait shows the next one.
+// Things circle her head: they pass behind it (under ari-head-cut.webp, her head and hair cut
+// out of the same art) and in front of it at forehead height. The official logo art is unchanged.
 // Add ?flair=pizza (any name in THEMES) to the URL to force one.
 (() => {
   const head = document.getElementById('head');
@@ -70,52 +71,53 @@
   const BF = [['#c9a8f2', '#e6d6fa'], ['#9bd34a', '#cdeaa0'], ['#ffd23f', '#ffe98f'], ['#ff8fb1', '#ffc4d6'], ['#7cc6fe', '#bfe3ff']];
   const BRIGHT = ['#c9a8f2', '#9bd34a', '#ffd23f', '#ff8fb1', '#7cc6fe'];
 
-  // mode: ring = evenly spaced on one tilted orbit; free = each on its own orbit with wobble;
-  // loop = free + loop-the-loops; rise = drift up past her sides.
+
+  // Orbits are centred on her head in the art, in fractions of the portrait width:
+  // CX/CY = centre of the halo (hair/forehead height); r = radius; k = how flat the ring is.
+  // Front passes stay at forehead height (y <= ~0.48) so her eyes and smile stay clear.
+  const CX = .5, CY = .345;
+  // mode: ring = evenly spaced on one ring; free = each on its own ring with wobble; loop = free + loop-the-loops
   const THEMES = {
-    butterflies: { n: 8, size: [.19, .25], mode: 'free', speed: [.35, .6], r: [1.12, 1.4], face: 90, sprite: i => SP.butterfly(BF[i % BF.length]), cls: 'flutter' },
-    fairies: { n: 6, size: [.2, .24], mode: 'loop', speed: [.4, .6], r: [1.12, 1.3], trail: true, sprite: i => SP.fairy(BRIGHT[i % BRIGHT.length]), cls: 'buzz' },
-    pizza: { n: 8, size: [.19, .21], mode: 'ring', speed: [.34, .34], r: [1.22, 1.22], spin: true, sprite: () => SP.pizza() },
-    lightbulbs: { n: 7, size: [.2, .24], mode: 'free', speed: [.14, .26], r: [1.14, 1.36], sprite: () => SP.bulb(), cls: 'blink' },
-    stars: { n: 14, size: [.08, .16], mode: 'free', speed: [.1, .26], r: [1.05, 1.42], sprite: i => i % 3 ? SP.star(['#ffd23f', '#fff', '#c9a8f2'][i % 3]) : SP.sparkle('#fff6b0'), cls: 'twinkle' },
-    music: { n: 10, size: [.14, .19], mode: 'rise', life: [4, 6.5], sprite: i => (i % 2 ? SP.note : SP.notes)(BRIGHT[i % BRIGHT.length]) },
-    planes: { n: 6, size: [.19, .22], mode: 'free', speed: [.45, .7], r: [1.15, 1.38], face: 37.7, sprite: () => SP.plane() },
-    bubbles: { n: 12, size: [.1, .21], mode: 'rise', life: [4.5, 7.5], pop: true, sprite: i => SP.bubble(['#7cc6fe', '#c9a8f2', '#9bd34a'][i % 3]) },
-    sushi: { n: 9, size: [.18, .2], mode: 'ring', speed: [.28, .28], r: [1.22, 1.22], sprite: i => [SP.nigiri, () => SP.maki(['#ff8a5b', '#9bd34a', '#ffd23f'][i % 3]), SP.wasabi][i % 3]() },
+    butterflies: { n: 7, size: [0.12, 0.156], mode: 'free', speed: [.4, .65], r: [.36, .44], face: 90, sprite: i => SP.butterfly(BF[i % BF.length]), cls: 'flutter' },
+    fairies: { n: 5, size: [0.132, 0.156], mode: 'loop', speed: [.45, .6], r: [.36, .42], trail: true, sprite: i => SP.fairy(BRIGHT[i % BRIGHT.length]), cls: 'buzz' },
+    pizza: { n: 8, size: [0.12, 0.132], mode: 'ring', speed: [.38, .38], r: [.41, .41], spin: true, sprite: () => SP.pizza() },
+    lightbulbs: { n: 7, size: [0.132, 0.156], mode: 'free', speed: [.2, .32], r: [.37, .44], sprite: () => SP.bulb(), cls: 'blink' },
+    stars: { n: 12, size: [0.054, 0.096], mode: 'free', speed: [.15, .3], r: [.33, .46], sprite: i => i % 3 ? SP.star(['#ffd23f', '#fff', '#c9a8f2'][i % 3]) : SP.sparkle('#fff6b0'), cls: 'twinkle' },
+    music: { n: 9, size: [0.096, 0.12], mode: 'free', speed: [.3, .45], r: [.36, .44], sprite: i => (i % 2 ? SP.note : SP.notes)(BRIGHT[i % BRIGHT.length]) },
+    planes: { n: 5, size: [0.12, 0.144], mode: 'free', speed: [.5, .7], r: [.37, .44], face: 37.7, sprite: () => SP.plane() },
+    bubbles: { n: 10, size: [0.072, 0.132], mode: 'free', speed: [.15, .3], r: [.34, .46], pop: true, sprite: i => SP.bubble(['#7cc6fe', '#c9a8f2', '#9bd34a'][i % 3]) },
+    sushi: { n: 9, size: [0.114, 0.126], mode: 'ring', speed: [.3, .3], r: [.41, .41], sprite: i => [SP.nigiri, () => SP.maki(['#ff8a5b', '#9bd34a', '#ffd23f'][i % 3]), SP.wasabi][i % 3]() },
   };
   const NAMES = Object.keys(THEMES);
   const KEY = 'wasabiari.flair';
 
-  let R = 0, parts = [], theme = null, t0 = 0, running = false, raf = 0, lastSpark = 0;
-  const measure = () => { R = back.offsetWidth / 2; };
+  let W = 0, parts = [], theme = null, t0 = 0, running = false, raf = 0, lastSpark = 0;
+  const measure = () => { W = back.offsetWidth; };
 
   function build(name) {
     parts.forEach(p => { p.el.classList.add('bye'); setTimeout(() => p.el.remove(), 400); });
     theme = THEMES[name];
-    const T = theme, ringPsi = rnd(-.35, .35), ringK = rnd(.76, .86), ringDir = Math.random() < .5 ? -1 : 1;
+    const T = theme, ringPsi = rnd(-.12, .12), ringK = rnd(.22, .27), ringDir = Math.random() < .5 ? -1 : 1;
     parts = Array.from({ length: T.n }, (_, i) => {
       const el = document.createElement('div');
       el.className = 'fp' + (T.cls ? ' ' + T.cls : '');
-      const size = rnd(...T.size);
-      el.style.setProperty('--w', (size * 100).toFixed(2) + '%');
+      el.style.setProperty('--w', (rnd(...T.size) * 100).toFixed(2) + '%');
       el.style.setProperty('--d', rnd(1.4, 3.4).toFixed(2) + 's');
       el.style.setProperty('--dl', (-rnd(0, 3)).toFixed(2) + 's');
       el.innerHTML = T.sprite(i);
-      const r0 = T.r ? rnd(...T.r) : 1;
+      const ring = T.mode === 'ring';
       const p = {
-        el, size, front: true, rot: 0, px: null, py: null,
-        th0: T.mode === 'ring' ? i * TAU / T.n : rnd(0, TAU),
-        w: rnd(...(T.speed || [0, 0])),
-        dir: T.mode === 'ring' ? ringDir : (Math.random() < .5 ? -1 : 1),
-        r0,
-        // keep the front pass of each orbit out at the edge of the portrait, away from her face
-        k: T.mode === 'ring' ? ringK : rnd(Math.max(.6, .9 / r0), .95),
-        psi: T.mode === 'ring' ? ringPsi : rnd(-.6, .6),
+        el, front: true, rot: 0, px: null, py: null,
+        th0: ring ? i * TAU / T.n : rnd(0, TAU),
+        w: rnd(...T.speed),
+        dir: ring ? ringDir : (Math.random() < .5 ? -1 : 1),
+        r0: rnd(...T.r),
+        k: ring ? ringK : rnd(.14, .28),
+        psi: ring ? ringPsi : rnd(-.28, .28),
         ph: rnd(0, TAU), ph2: rnd(0, TAU), ph3: rnd(0, TAU),
         delay: i * .07,
         spinV: rnd(25, 60) * (Math.random() < .5 ? -1 : 1),
-        life: T.life ? rnd(...T.life) : 0, off: rnd(0, 8),
-        side: i % 2 ? 1 : -1, xr: rnd(1.02, 1.3),
+        life: rnd(3, 5.5), off: rnd(0, 6),
       };
       front.appendChild(el);
       return p;
@@ -136,26 +138,23 @@
     const t = (now - t0) / 1000, T = theme;
     const doSpark = T.trail && now - lastSpark > 70;
     if (doSpark) lastSpark = now;
+    const ox = (CX - .5) * W, oy = (CY - .5) * W;
     for (const p of parts) {
       const intro = ease(clamp((t - p.delay) / 1.1));
-      let x, y, depth = 1, op = intro, sc = 1;
-      if (T.mode === 'rise') {
+      const wob = T.mode !== 'ring';
+      const th = p.th0 + p.dir * p.w * t + (wob ? .35 * Math.sin(1.3 * t + p.ph) : 0);
+      const r = p.r0 * W * (wob ? 1 + .05 * Math.sin(2.3 * t + p.ph2) : 1) * (.4 + .6 * intro);
+      let ex = r * Math.cos(th), ey = r * Math.sin(th) * p.k;
+      if (T.mode === 'loop') { const a = p.ph3 + p.dir * 4.2 * t; ex += .05 * W * Math.cos(a); ey += .03 * W * Math.sin(a); }
+      if (wob) ey += .015 * W * Math.sin(3.1 * t + p.ph);
+      const c = Math.cos(p.psi), sn = Math.sin(p.psi);
+      const x = ox + ex * c - ey * sn, y = oy + ex * sn + ey * c;
+      const depth = Math.sin(th);
+      let op = intro, sc = 1 + .18 * depth;
+      if (T.pop) {  // bubbles grow in, drift, then pop and come back
         const u = ((t + p.off) % p.life) / p.life;
-        x = p.side * p.xr * R + .14 * R * Math.sin(u * TAU * 2 + p.ph);
-        y = R * (1.25 - 2.75 * u);
-        op *= clamp(u / .12) * clamp((1 - u) / .15);
-        if (T.pop && u > .88) { sc = 1 + (u - .88) * 5; op *= clamp((1 - u) / .12); }
-      } else {
-        const wob = T.mode !== 'ring';
-        const th = p.th0 + p.dir * p.w * t + (wob ? .5 * Math.sin(1.3 * t + p.ph) : 0);
-        const r = p.r0 * R * (wob ? 1 + .07 * Math.sin(2.3 * t + p.ph2) : 1) * (.35 + .65 * intro);
-        let ex = r * Math.cos(th), ey = r * Math.sin(th) * p.k;
-        if (T.mode === 'loop') { const a = p.ph3 + p.dir * 4.2 * t; ex += .18 * R * Math.cos(a); ey += .18 * R * Math.sin(a); }
-        if (wob) ey += .05 * R * Math.sin(3.1 * t + p.ph);
-        const c = Math.cos(p.psi), s = Math.sin(p.psi);
-        x = ex * c - ey * s; y = ex * s + ey * c;
-        depth = Math.sin(th);
-        sc = 1 + .14 * depth;
+        op *= clamp(u / .15);
+        if (u > .85) { sc *= 1 + (u - .85) * 5; op *= clamp((1 - u) / .1); }
       }
       const wantFront = depth > 0;
       if (wantFront !== p.front) { (wantFront ? front : back).appendChild(p.el); p.front = wantFront; }
@@ -163,7 +162,7 @@
         const dx = x - p.px, dy = y - p.py;
         if (dx * dx + dy * dy > .01) {
           const target = Math.atan2(dy, dx) * 180 / Math.PI + T.face;
-          let d = ((target - p.rot) % 360 + 540) % 360 - 180;
+          const d = ((target - p.rot) % 360 + 540) % 360 - 180;
           p.rot += d * .2;
         }
       } else if (T.spin) p.rot = p.spinV * t;
@@ -171,7 +170,7 @@
       p.px = x; p.py = y;
       p.el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${p.rot.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
       p.el.style.opacity = op.toFixed(3);
-      if (doSpark && intro > .5) sparkAt(p.front ? front : back, x + rnd(-4, 4), y + rnd(-4, 4));
+      if (doSpark && intro > .5) sparkAt(p.front ? front : back, x + rnd(-3, 3), y + rnd(-3, 3));
     }
     if (running && !reduce) raf = requestAnimationFrame(frame);
   }

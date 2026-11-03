@@ -25,11 +25,11 @@
 
 @media (max-width:480px){.node.game{max-width:116px;font-size:14px;padding:8px 9px;border-radius:15px}.node.game small{font-size:10.5px}}
 
-/* flair.js: a different set of critters around the portrait each visit */
-.flair{position:absolute;left:50%;top:50%;width:min(72vw,52vh);aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:1;will-change:transform}
-.flair.front{z-index:2}
+/* flair.js: a different set of critters circling her head inside the portrait each visit */
+.head .flair{position:absolute;inset:0;pointer-events:none}
+.head img.cut{position:absolute;height:auto;pointer-events:none}
 .head{cursor:pointer;-webkit-tap-highlight-color:transparent}
-.head:focus-visible{outline:3px dashed var(--wasabi);outline-offset:18px}
+.head:focus-visible{outline:3px dashed var(--wasabi);outline-offset:-10px}
 .fp{position:absolute;left:50%;top:50%;width:var(--w);aspect-ratio:1;margin:calc(var(--w) / -2) 0 0 calc(var(--w) / -2);opacity:0;will-change:transform,opacity}
 .fp.bye{opacity:0!important;transition:opacity .35s}
 .fp svg{display:block;width:100%;height:100%;overflow:visible}
