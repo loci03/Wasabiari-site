@@ -51,21 +51,24 @@ def page(path, title, body, active="/", pre="", extra_head=""):
 <title>{title}</title>{FONTS}<link rel="stylesheet" href="/assets/style.css"><link rel="icon" href="/assets/ari-face.jpg"><link rel="apple-touch-icon" href="/assets/ari-face.jpg">{extra_head}</head>
 <body{' class="home"' if pre else ''}><header><div class="wrap"><a class="brand" href="/"><img src="/assets/ari-face.jpg" alt=""><span><b>wasabi<span>ari</span></b><small>WASABI ENTERTAINMENT</small></span></a><nav>{nav}</nav></div></header>
 {pre}<main><div class="wrap">{body}</div></main>
-<footer><div class="wrap"><span>&copy; 2026 Wasabi Entertainment &middot; Boston, MA</span><a href="/support/">Contact &amp; Support</a><a href="/micro-mayhem/privacy/">Micro Mayhem privacy</a><a href="/for-the-waves/privacy/">For the Waves privacy</a><a href="/tetris-beats/privacy/">Tetris Beats privacy</a></div></footer>
+<footer><div class="wrap"><span>&copy; 2026 Wasabi Entertainment &middot; Boston, MA</span><a href="/support/">Contact &amp; Support</a><a href="/micro-mayhem/privacy/">Micro Mayhem! privacy</a><a href="/for-the-waves/privacy/">For the Waves privacy</a><a href="/tetris-beats/privacy/">Tetris Beats privacy</a></div></footer>
 </body></html>
 """
     d = os.path.join(OUT, path.strip("/"))
     os.makedirs(d, exist_ok=True)
     open(os.path.join(d, "index.html"), "w").write(html)
 
-def privacy(slug, game):
+MIC_SECTION = """<h2>Microphone and speech recognition</h2><p>One level, Walk It, asks you to shout &ldquo;HIDE!&rdquo; at your phone. For that level only, the game asks for permission to use the microphone and speech recognition. Speech recognition runs entirely on your iPhone: your voice is never recorded, saved, or sent to us, to Apple, or to anyone else. The game listens only while that level is on screen and stops as soon as it ends.</p>
+<p>You can say no. If you do, a big HIDE button appears instead and the level plays the same way. You can change this any time in Settings &gt; Privacy &amp; Security &gt; Microphone and Speech Recognition.</p>"""
+
+def privacy(slug, game, updated="November 1, 2026", extra=""):
     return f"""<div class="legal"><div class="crumbs"><a href="/{slug}/">{game}</a> / Privacy</div>
-<h1>{game} privacy policy</h1><p class="lede">Last updated: November 1, 2026</p>
+<h1>{game} privacy policy</h1><p class="lede">Last updated: {updated}</p>
 <p class="note">DRAFT: written assuming the game has no accounts, ads, analytics, or online features. Confirm before publishing.</p>
 <p>{game} is made by Ivan (Wasabi Entertainment) in Boston, Massachusetts. This policy explains what the game does with your information. Short version: nothing leaves your device.</p>
 <h2>What we collect</h2><p>We do not collect, store, or share any personal information. The game has no accounts, no ads, and no analytics or tracking.</p>
 <h2>What stays on your device</h2><p>Your progress and settings are saved only on your device (and in your own iCloud backup if you use one). We cannot see them.</p>
-<h2>Children</h2><p>The game is suitable for all ages. Because we collect no information from anyone, we collect none from children.</p>
+{extra}<h2>Children</h2><p>Because we collect no information from anyone, we collect none from children.</p>
 <h2>Third parties</h2><p>We do not sell or share data with anyone. Apple may collect data under its own privacy policy when you download apps from the App Store.</p>
 <h2>Changes</h2><p>If this ever changes, for example if online features are added, we will update this page and the date above before the change ships.</p>
 <h2>Contact</h2><p>Questions? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a>.</p></div>"""
@@ -74,7 +77,7 @@ HOME_PRE = open(os.path.join(os.path.dirname(__file__), "home-web.html")).read()
 page("/", "wasabiari · Wasabi Entertainment", """<h2 style="margin-top:0">Everything in one place</h2>
 <p class="lede">Home of Wasabi Entertainment and Ivan's other projects, made in Boston.</p>
 <div class="grid">
-<div class="card proj"><span class="tag live">Coming to the App Store</span><h3><a href="/micro-mayhem/">Micro Mayhem</a></h3><p>DRAFT: one line about the game.</p><a class="pv" href="/micro-mayhem/privacy/">Privacy</a></div>
+<div class="card proj"><span class="tag live">Coming to the App Store</span><h3><a href="/micro-mayhem/">Micro Mayhem!</a></h3><p>DRAFT: 26 tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, shout HIDE!</p><a class="pv" href="/micro-mayhem/privacy/">Privacy</a></div>
 <div class="card proj"><span class="tag">In development</span><h3><a href="/for-the-waves/">For the Waves</a></h3><p>DRAFT: one line about the game.</p><a class="pv" href="/for-the-waves/privacy/">Privacy</a></div>
 <div class="card proj"><span class="tag">In development</span><h3><a href="/tetris-beats/">Tetris Beats</a></h3><p>DRAFT: one line about the game.</p><a class="pv" href="/tetris-beats/privacy/">Privacy</a></div>
 <a class="card" href="/inkbleed/"><span class="tag">Coming soon</span><h3>InkBleed</h3><p>A creative studio for comics, art, video and sound.</p></a>
@@ -82,24 +85,28 @@ page("/", "wasabiari · Wasabi Entertainment", """<h2 style="margin-top:0">Every
 <p class="links"><a href="/support/">Contact &amp; Support</a><a href="/about/">About</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script>')
 page("/projects/", "Projects · wasabiari", """<h1>Projects</h1><p class="lede">Everything I'm building, in one place.</p>
 <h2>Wasabi Entertainment</h2><p>My games label.</p><div class="grid">
-<a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem</h3><p>DRAFT: one line about the game.</p></a>
+<a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem!</h3><p>DRAFT: 26 tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, shout HIDE!</p></a>
 <a class="card" href="/for-the-waves/"><span class="tag">In development</span><h3>For the Waves</h3><p>DRAFT: one line about the game.</p></a>
 <a class="card" href="/tetris-beats/"><span class="tag">In development</span><h3>Tetris Beats</h3><p>DRAFT: one line about the game.</p></a></div>
 <h2>Other projects</h2><div class="grid">
 <a class="card" href="/inkbleed/"><span class="tag">Coming soon</span><h3>InkBleed</h3><p>A creative studio for comics, art, video and sound.</p></a></div>""", "/projects/")
 page("/wasabi-entertainment/", "Wasabi Entertainment", """<div class="crumbs"><a href="/projects/">Projects</a> / Wasabi Entertainment</div>
 <h1>Wasabi Entertainment</h1><p class="lede">Small games with big personality, made in Boston. Named after Wasabi.</p><div class="grid">
-<a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem</h3><p>DRAFT: one line about the game.</p></a>
+<a class="card" href="/micro-mayhem/"><span class="tag live">Coming to the App Store</span><h3>Micro Mayhem!</h3><p>DRAFT: 26 tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, shout HIDE!</p></a>
 <a class="card" href="/for-the-waves/"><span class="tag">In development</span><h3>For the Waves</h3><p>DRAFT: one line about the game.</p></a>
 <a class="card" href="/tetris-beats/"><span class="tag">In development</span><h3>Tetris Beats</h3><p>DRAFT: one line about the game.</p></a></div>""", "/projects/")
-for slug, game, status in [("micro-mayhem","Micro Mayhem","Coming to the App Store"),("for-the-waves","For the Waves","In development"),("tetris-beats","Tetris Beats","In development")]:
+for slug, game, status in [("micro-mayhem","Micro Mayhem!","Coming to the App Store"),("for-the-waves","For the Waves","In development"),("tetris-beats","Tetris Beats","In development")]:
     page(f"/{slug}/", f"{game} · Wasabi Entertainment", f"""<div class="crumbs"><a href="/projects/">Projects</a> / <a href="/wasabi-entertainment/">Wasabi Entertainment</a> / {game}</div>
 <span class="tag{' live' if 'App' in status else ''}">{status}</span><h1>{game}</h1>
 <p class="lede">DRAFT: two sentences about the game go here, from Ivan.</p>
 <p class="note">Screenshots and the App Store button go here once the game is live.</p>
 <h2>Free, no ads, no tracking</h2><p>The game is free and collects no personal data. <a href="/{slug}/privacy/">Read the privacy policy</a>.</p>
 <h2>Need help?</h2><p>Found a bug or have an idea? <a href="/support/">Contact support</a>.</p>""", "/projects/")
-    page(f"/{slug}/privacy/", f"{game} privacy policy", privacy(slug, game), "/projects/")
+    if slug == "micro-mayhem":
+        priv = privacy(slug, game, "November 3, 2026", MIC_SECTION)
+    else:
+        priv = privacy(slug, game)
+    page(f"/{slug}/privacy/", f"{game} privacy policy", priv, "/projects/")
 page("/inkbleed/", "InkBleed · coming soon", """<div class="crumbs"><a href="/projects/">Projects</a> / InkBleed</div>
 <span class="tag">Coming soon</span><h1>InkBleed</h1><p class="lede">A creative studio for comics, art, video and sound, running on open models you own.</p>
 <p>It's being built and tested at home first. Check back for news.</p>""", "/projects/")
@@ -109,7 +116,7 @@ page("/about/", "About · wasabiari", """<h1>About</h1><p class="lede">I'm Ivan,
 page("/support/", "Contact & Support · wasabiari", """<h1>Contact &amp; Support</h1><p class="lede">Questions, bugs, or ideas about any of my games or projects? I read every message.</p>
 <a class="btn" href="mailto:support@wasabiari.com">Email support@wasabiari.com</a>
 <h2>When you write about a bug</h2><p>Tell me which game, what you were doing, and your iPhone model. A screenshot helps a lot.</p>
-<h2>Privacy policies</h2><p><a href="/micro-mayhem/privacy/">Micro Mayhem</a> · <a href="/for-the-waves/privacy/">For the Waves</a> · <a href="/tetris-beats/privacy/">Tetris Beats</a></p>
+<h2>Privacy policies</h2><p><a href="/micro-mayhem/privacy/">Micro Mayhem!</a> · <a href="/for-the-waves/privacy/">For the Waves</a> · <a href="/tetris-beats/privacy/">Tetris Beats</a></p>
 <p>I usually reply within a few days.</p>""", "/support/")
 os.makedirs(os.path.join(OUT,"assets"), exist_ok=True)
 open(os.path.join(OUT,"assets/style.css"),"w").write(CSS)
