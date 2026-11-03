@@ -130,7 +130,7 @@ page("/", f"wasabiari · {BRAND}", f"""<h2 style="margin-top:0">Everything in on
 <div class="grid">
 {game_cards(True)}
 </div>
-<p class="links"><a href="/about/">About</a><a href="/support/">Contact &amp; Support</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script>')
+<p class="links"><a href="/about/">About</a><a href="/support/">Contact &amp; Support</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script><script defer src="/assets/flair.js"></script>')
 page("/projects/", "Projects · wasabiari", f"""<h1>Projects</h1><p class="lede">Everything I'm building, in one place.</p>
 <div class="grid">
 {INK_CARD}
