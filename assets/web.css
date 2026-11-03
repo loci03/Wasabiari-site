@@ -15,6 +15,7 @@
   padding:10px 14px;border-radius:18px;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
 .node small{display:block;font-family:var(--font);font-weight:600;font-size:12px;color:#40364c;margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
 .node.proj{background:var(--lilac)}
+.node.shop{background:#eaf6d9}
 .node.big{background:var(--acc);color:var(--ink);max-width:150px}
 .node:hover,.node:focus-visible{box-shadow:5px 5px 0 var(--ink)}
 @media (prefers-reduced-motion: reduce){.web{height:auto}.stage{position:relative;height:100svh}.hint{display:none}}
