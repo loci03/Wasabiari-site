@@ -58,7 +58,8 @@ def page(path, title, body, active="/", pre="", extra_head=""):
     os.makedirs(d, exist_ok=True)
     open(os.path.join(d, "index.html"), "w").write(html)
 
-MIC_SECTION = """<h2>Microphone and speech recognition</h2><p>One level, Walk It, asks you to shout &ldquo;HIDE!&rdquo; at your phone. For that level only, the game asks for permission to use the microphone and speech recognition. Speech recognition runs entirely on your iPhone: your voice is never recorded, saved, or sent to us, to Apple, or to anyone else. The game listens only while that level is on screen and stops as soon as it ends.</p>
+MIC_SECTION = """<h2>Microphone and speech recognition</h2><p>One level, Walk It, asks you to shout &ldquo;HIDE!&rdquo; at your phone. For that level only, the game asks for permission to use the microphone and speech recognition. Speech recognition runs entirely on your iPhone: your voice is never recorded, saved, or sent to us, to Apple, or to anyone else. The game listens only while that level is on screen and stops as soon as it ends. If recognition doesn't catch the word, the game also accepts a loud shout, which it detects by measuring loudness only.</p>
+<p>When you first play the level, iOS shows its standard speech recognition prompt, which mentions that speech data may be sent to Apple. Micro Mayhem! asks only for on-device recognition, so your audio stays on your iPhone.</p>
 <p>You can say no. If you do, a big HIDE button appears instead and the level plays the same way. You can change this any time in Settings &gt; Privacy &amp; Security &gt; Microphone and Speech Recognition.</p>"""
 
 def privacy(slug, game, updated="November 1, 2026", extra=""):
