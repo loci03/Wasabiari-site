@@ -62,9 +62,9 @@ def page(path, title, body, active="/", pre="", extra_head=""):
     os.makedirs(d, exist_ok=True)
     open(os.path.join(d, "index.html"), "w").write(html)
 
-MIC_SECTION = """<h2>Microphone and speech recognition</h2><p>One level, Walk It, asks you to shout &ldquo;HIDE!&rdquo; at your phone. For that level only, the game asks for permission to use the microphone and speech recognition. Speech recognition runs entirely on your iPhone: your voice is never recorded, saved, or sent to us, to Apple, or to anyone else. The game listens only while that level is on screen and stops as soon as it ends. If recognition doesn't catch the word, the game also accepts a loud shout, which it detects by measuring loudness only.</p>
-<p>When you first play the level, iOS shows its standard speech recognition prompt, which mentions that speech data may be sent to Apple. Micro Mayhem! asks only for on-device recognition, so your audio stays on your iPhone.</p>
-<p>You can say no. If you do, a big HIDE button appears instead and the level plays the same way. You can change this any time in Settings &gt; Privacy &amp; Security &gt; Microphone and Speech Recognition.</p>"""
+MIC_SECTION = """<h2>Microphone and speech recognition (optional)</h2><p>Micro Mayhem! is played by touch. The microphone is used only if you turn on the optional Voice levels setting, which is off by default. Until you do, the game never uses the microphone and never asks for microphone or speech recognition permission.</p>
+<p>If you turn Voice levels on, levels that support voice, such as Walk It (shout &ldquo;HIDE!&rdquo;), ask iOS for permission to use the microphone and speech recognition. Recognition runs entirely on your iPhone and only while that round is on screen. Your voice is never recorded, saved, or sent to us, to Apple, or to anyone else. If recognition doesn't catch the word, a loud shout also counts, which the game detects by measuring loudness only.</p>
+<p>iOS shows its standard speech recognition prompt, which mentions that speech data may be sent to Apple. Micro Mayhem! asks only for on-device recognition, so your audio stays on your iPhone. You can turn Voice levels off at any time, and change these permissions in Settings &gt; Privacy &amp; Security &gt; Microphone and Speech Recognition.</p>"""
 
 EXTRA_PRIVACY = {
     "stryde-rider": """<h2>Bluetooth and your bike</h2><p>Stryde Rider connects to your cadence sensor over Bluetooth to read how fast you pedal. That reading is used for the ride and stays on your device.</p>""",
@@ -108,7 +108,7 @@ PARKED = [
     ("turner", "Turner", "Coming soon", "A clean, simple player for your own IPTV subscription: live channels, a TV guide and movies on your phone or TV."),
 ]
 GAMES = [  # slug, name, status tag, blurb (from each project's earlier sessions/repos; Ivan can rewrite)
-    ("micro-mayhem", "Micro Mayhem!", "App Store soon", "26 tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, shout HIDE!"),
+    ("micro-mayhem", "Micro Mayhem!", "App Store soon", "Tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, tap HIDE!"),
     ("beat-stack", "Beat Stack", "Coming soon", "A block-stacking puzzle set to music: 19 themed levels, story battles, a shared leaderboard and head-to-head play."),
     ("for-the-waves", "For the Waves", "Coming soon", "A neon pixel wave racer. Carve across open water, hit ramps and rings, and outrun a hungry shark."),
     ("stryde-rider", "Stryde Rider", "Coming soon", "A cycling game for your exercise bike. Your pedaling drives the ride: race AI riders and chase your own ghost."),
