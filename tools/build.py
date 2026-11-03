@@ -69,22 +69,27 @@ EXTRA_PRIVACY = {
     "turner": """<h2>Your TV subscription</h2><p class="note">DRAFT: Turner signs in to the IPTV service you choose. This section needs to say where that login is kept and what the provider sees, once it's settled how Turner ships.</p>""",
 }
 
-ONLINE_NOTE = """<p class="note">DRAFT: Beat Stack has a shared leaderboard and head-to-head battles, so it does send some data, such as scores. This page needs to say exactly what is sent and kept before it goes public. I'll fill it in after checking the game's code.</p>"""
+BEAT_STACK_PRIVACY = """<p>{game} is made by Ivan ({brand}) in Boston, Massachusetts. This policy explains what the game does with your information. Short version: there are no accounts, ads or tracking. Only the initials and scores you choose to post, and your moves during a battle, go to our server.</p>
+<h2>What we collect</h2>
+<p><b>Shared leaderboard.</b> When you get a high score, the game asks for your initials. If you enter them, it sends those initials (up to 3 letters or numbers), your score, lines, level and game mode, plus your finish time in Sprint. We keep that with the date in a public top-50 list for each mode, which everyone who plays can see. Please use initials, not your name. If you&rsquo;re offline, the score waits on your device and is sent when you&rsquo;re back online.</p>
+<p><b>Battles.</b> In a head-to-head game, both players join a room with a 4-character code. Our server passes your initials and your moves to your opponent while the match runs. Battles are not saved.</p>
+<p><b>Your IP address.</b> Like any website, our server sees your device&rsquo;s IP address when the game connects. We use it only to limit score uploads to 10 a minute, keep it in memory for about a minute, and never store it.</p>
+<h2>What stays on your device</h2><p>Your settings (sound, volume, voice, ghost piece, AI difficulty and starting level), your replays and your own score list are saved only on your device. We cannot see them.</p>
+<h2>Third parties</h2><p>We do not sell or share your data. The leaderboard and battle server runs on Cloudflare, which handles connection data under <a href="https://www.cloudflare.com/privacypolicy/">its own privacy policy</a>. The game&rsquo;s fonts load from Google Fonts, which sees your IP address under <a href="https://policies.google.com/privacy">Google&rsquo;s privacy policy</a>. If the game comes to the App Store, Apple may collect data under its own policy when you download it.</p>
+<h2>Children</h2><p>The game has no accounts and asks for nothing but optional initials, so we don&rsquo;t knowingly collect personal information from children.</p>
+<h2>Changes</h2><p>If this changes, we will update this page and the date above before the change ships.</p>
+<h2>Contact</h2><p>Questions, or want a leaderboard entry removed? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a>.</p>"""
 
-def privacy(slug, game, updated="November 1, 2026", extra="", online=False):
+DRAFT_NOTE = """<p class="note">DRAFT: written assuming the game has no accounts, ads, analytics, or online features. Confirm before publishing.</p>
+"""
+
+def privacy(slug, game, updated="November 1, 2026", extra="", online=False, draft=True):
+    head = f"""<div class="legal"><div class="crumbs"><a href="/{slug}/">{game}</a> / Privacy</div>
+<h1>{game} privacy policy</h1><p class="lede">Last updated: {updated}</p>
+"""
     if online:
-        return f"""<div class="legal"><div class="crumbs"><a href="/{slug}/">{game}</a> / Privacy</div>
-<h1>{game} privacy policy</h1><p class="lede">Last updated: {updated}</p>
-{ONLINE_NOTE}
-<p>{game} is made by Ivan ({BRAND}) in Boston, Massachusetts. This policy explains what the game does with your information.</p>
-<h2>What we collect</h2><p>DRAFT: what the leaderboard and battles send (for example the name you enter and your scores), where it is stored, and for how long.</p>
-<h2>What stays on your device</h2><p>Your settings and replays are saved on your device. We cannot see them.</p>
-<h2>Third parties</h2><p>We do not sell your data. Apple may collect data under its own privacy policy when you download apps from the App Store.</p>
-<h2>Contact</h2><p>Questions, or want your leaderboard entry removed? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a>.</p></div>"""
-    return f"""<div class="legal"><div class="crumbs"><a href="/{slug}/">{game}</a> / Privacy</div>
-<h1>{game} privacy policy</h1><p class="lede">Last updated: {updated}</p>
-<p class="note">DRAFT: written assuming the game has no accounts, ads, analytics, or online features. Confirm before publishing.</p>
-<p>{game} is made by Ivan ({BRAND}) in Boston, Massachusetts. This policy explains what the game does with your information. Short version: nothing leaves your device.</p>
+        return head + BEAT_STACK_PRIVACY.format(game=game, brand=BRAND) + "</div>"
+    return head + f"""{DRAFT_NOTE if draft else ""}<p>{game} is made by Ivan ({BRAND}) in Boston, Massachusetts. This policy explains what the game does with your information. Short version: nothing leaves your device.</p>
 <h2>What we collect</h2><p>We do not collect, store, or share any personal information. The game has no accounts, no ads, and no analytics or tracking.</p>
 <h2>What stays on your device</h2><p>Your progress and settings are saved only on your device (and in your own iCloud backup if you use one). We cannot see them.</p>
 {extra}<h2>Children</h2><p>Because we collect no information from anyone, we collect none from children.</p>
@@ -150,12 +155,15 @@ for slug, game, status, blurb in GAMES:
 <p class="note">Screenshots{" and the App Store button" if "App Store" in status else ""} go here once the game is out.</p>
 {free}<a href="/{slug}/privacy/">Read the privacy policy</a>.</p>
 <h2>Need help?</h2><p>Found a bug or have an idea? <a href="/support/">Contact support</a>.</p>""", "/projects/")
+    # Checked against the code 11-03: Micro Mayhem! (Games' STORE-FACTS) and For the Waves make no
+    # network calls; Beat Stack's Worker stores initials + scores only. Stryde Rider and Turner unchecked.
+    checked = slug in ("micro-mayhem", "for-the-waves")
     if slug == "micro-mayhem":
-        priv = privacy(slug, game, "November 3, 2026", MIC_SECTION)
+        priv = privacy(slug, game, "November 3, 2026", MIC_SECTION, draft=False)
     elif slug in EXTRA_PRIVACY:
         priv = privacy(slug, game, "November 3, 2026", EXTRA_PRIVACY[slug])
     else:
-        priv = privacy(slug, game, online=online)
+        priv = privacy(slug, game, "November 3, 2026", online=online, draft=not checked)
     page(f"/{slug}/privacy/", f"{game} privacy policy", priv, "/projects/")
 page("/inkbleed/", "InkBleed · coming soon", """<div class="crumbs"><a href="/projects/">Projects</a> / InkBleed</div>
 <span class="tag">Coming soon</span><h1>InkBleed</h1><p class="lede">A creative studio for comics, art, video and sound, running on open models you own.</p>
