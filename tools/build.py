@@ -1,7 +1,7 @@
 import os, sys
 BRAND = "WASABI Entertainment"
 OUT = sys.argv[1]
-NAV = [("/", "Home"), ("/projects/", "Projects"), ("/shop/", "Shop & Merch"), ("/about/", "About"), ("/support/", "Contact & Support")]
+NAV = [("/", "Home"), ("/projects/", "Projects"), ("/shop/", "Shop & Merch"), ("/support/", "Contact & Support")]
 CSS = """
 :root{--bg:#fff6e6;--panel:#ffffff;--ink:#1b1b1b;--muted:#5d5548;--wasabi:#4f8f12;--acc:#9bd34a;--lilac:#c9a8f2;--line:#efe2c8;
   --font:'Inter',system-ui,-apple-system,sans-serif;--hfont:'Fredoka',system-ui,sans-serif}
@@ -99,7 +99,8 @@ def privacy(slug, game, updated="November 1, 2026", extra="", online=False, draf
 
 HOME_PRE = open(os.path.join(os.path.dirname(__file__), "home-web.html")).read()
 
-# Ivan's structure (03:32Z 11-03): InkBleed / WASABI Entertainment (games) / Shop & Merch / About / Contact & Support
+# Ivan's structure (03:32Z 11-03): InkBleed / WASABI Entertainment (games) / Shop & Merch / Contact & Support.
+# About moved into Contact & Support (Ivan, 15:08Z 11-03); /about/ redirects to /support/#about.
 GAMES = [  # slug, name, status tag, blurb (from each project's earlier sessions/repos; Ivan can rewrite)
     ("micro-mayhem", "Micro Mayhem!", "App Store soon", "26 tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, shout HIDE!"),
     ("beat-stack", "Beat Stack", "Coming soon", "A block-stacking puzzle set to music: 19 themed levels, story battles, a shared leaderboard and head-to-head play."),
@@ -130,7 +131,7 @@ page("/", f"wasabiari · {BRAND}", f"""<h2 style="margin-top:0">Everything in on
 <div class="grid">
 {game_cards(True)}
 </div>
-<p class="links"><a href="/about/">About</a><a href="/support/">Contact &amp; Support</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script><script defer src="/assets/flair.js"></script>')
+<p class="links"><a href="/support/">Contact &amp; Support</a><a href="/support/#about">About</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script><script defer src="/assets/flair.js"></script>')
 page("/projects/", "Projects · wasabiari", f"""<h1>Projects</h1><p class="lede">Everything I'm building, in one place.</p>
 <div class="grid">
 {INK_CARD}
@@ -178,15 +179,17 @@ page("/shop/", "Shop & Merch · wasabiari", f"""<h1>Shop &amp; Merch</h1><p clas
 </div>
 <h2>Paying</h2><p>Checkout runs on Stripe, so you can pay with Apple Pay or a card. I never see or store your card details.</p>
 <h2>Want something custom?</h2><p>A print with your name on it, a card set for an event, a one-off 3D print? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a> and tell me what you have in mind.</p>""", "/shop/")
-page("/about/", "About · wasabiari", """<h1>About</h1><p class="lede">I'm Ivan, a maker in Boston, Massachusetts.</p>
-<p>DRAFT: a few sentences from Ivan about himself and why he makes games and tools.</p>
-<p>The name wasabiari comes from Wasabi, Ariel's nickname, plus the first three letters of her name.</p>""", "/about/")
 PRIV_LIST = " · ".join(f'<a href="/{slug}/privacy/">{name}</a>' for slug, name, _, _ in GAMES)
 page("/support/", "Contact & Support · wasabiari", f"""<h1>Contact &amp; Support</h1><p class="lede">Questions, bugs, or ideas about any of my games or projects? I read every message.</p>
 <a class="btn" href="mailto:support@wasabiari.com">Email support@wasabiari.com</a>
 <h2>When you write about a bug</h2><p>Tell me which game, what you were doing, and your iPhone model. A screenshot helps a lot.</p>
 <h2 id="privacy">Privacy policies</h2><p>{PRIV_LIST}</p>
-<p>I usually reply within a few days.</p>""", "/support/")
+<p>I usually reply within a few days.</p>
+<h2 id="about">About</h2><p>I'm Ivan, a maker in Boston, Massachusetts. I make games, art, 3D prints and other projects at home, first for family and friends, and share the ones that turn out well here.</p>
+<p>The name wasabiari comes from Wasabi, Ariel's nickname, plus the first three letters of her name.</p>""", "/support/")
+# old /about/ link: send it to the About section on Contact & Support
+os.makedirs(os.path.join(OUT, "about"), exist_ok=True)
+open(os.path.join(OUT, "about", "index.html"), "w").write('<!doctype html><meta charset=utf-8><title>About · wasabiari</title><meta http-equiv="refresh" content="0; url=/support/#about"><link rel="canonical" href="/support/#about"><a href="/support/#about">About</a>')
 os.makedirs(os.path.join(OUT,"assets"), exist_ok=True)
 open(os.path.join(OUT,"assets/style.css"),"w").write(CSS)
 open(os.path.join(OUT,"CNAME"),"w").write("wasabiari.com\n")

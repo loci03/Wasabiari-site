@@ -47,3 +47,4 @@
 @media (prefers-reduced-motion: reduce){.fp,.fp *{animation:none!important}.blink .lit{opacity:1}}
 .hello,.tagline{z-index:3}
 .tagline span{color:var(--wasabi);font-weight:700}
+.node{width:max-content}
