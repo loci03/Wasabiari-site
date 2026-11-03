@@ -46,3 +46,4 @@
 @keyframes spark{from{transform:scale(1);opacity:1}to{transform:translateY(14px) scale(.15);opacity:0}}
 @media (prefers-reduced-motion: reduce){.fp,.fp *{animation:none!important}.blink .lit{opacity:1}}
 .hello,.tagline{z-index:3}
+.tagline span{color:var(--wasabi);font-weight:700}
