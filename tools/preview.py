@@ -18,10 +18,11 @@ for root, dirs, fs in os.walk("."):
             continue
         depth = src.count("/")
         pre = "../" * depth if depth else "./"
-        def fix(m):
-            attr, p = m.group(1), m.group(2)
-            if p.endswith("/"):
-                p += "index.html"
-            return f'{attr}="{pre}{p[1:]}"'
-        html = re.sub(r'(href|src)="(/[^"/][^"]*|/)"', fix, open(src).read())
+        def rel(p):
+            path, _, frag = p.partition("#")
+            if path.endswith("/"):
+                path += "index.html"
+            return pre + path[1:] + ("#" + frag if frag else "")
+        html = re.sub(r'(href|src)="(/[^"/][^"]*|/)"', lambda m: f'{m.group(1)}="{rel(m.group(2))}"', open(src).read())
+        html = re.sub(r'url=(/[^"]*)"', lambda m: f'url={rel(m.group(1))}"', html)  # meta refresh redirects
         open(dst, "w").write(html)
