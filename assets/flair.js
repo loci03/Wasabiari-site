@@ -74,7 +74,8 @@
 
   // Orbits are centred on her head in the art, in fractions of the portrait width:
   // CX/CY = centre of the halo (hair/forehead height); r = radius; k = how flat the ring is.
-  // Front passes stay at forehead height (y <= ~0.48) so her eyes and smile stay clear.
+  // Rings are tilted 15-25 degrees so the near side crosses her forehead on a slant instead of
+  // covering it; front passes stay above her eyes so her eyes and smile stay clear.
   const CX = .5, CY = .345;
   // mode: ring = evenly spaced on one ring; free = each on its own ring with wobble; loop = free + loop-the-loops
   const THEMES = {
@@ -91,13 +92,13 @@
   const NAMES = Object.keys(THEMES);
   const KEY = 'wasabiari.flair';
 
-  let W = 0, parts = [], theme = null, t0 = 0, running = false, raf = 0, lastSpark = 0;
+  let W = 0, parts = [], theme = null, t0 = 0, running = false, raf = 0, lastSpark = 0, inView = true, fade = 1;
   const measure = () => { W = back.offsetWidth; };
 
   function build(name) {
     parts.forEach(p => { p.el.classList.add('bye'); setTimeout(() => p.el.remove(), 400); });
     theme = THEMES[name];
-    const T = theme, ringPsi = rnd(-.12, .12), ringK = rnd(.22, .27), ringDir = Math.random() < .5 ? -1 : 1;
+    const T = theme, tiltSign = Math.random() < .5 ? -1 : 1, ringPsi = tiltSign * rnd(.3, .42), ringK = rnd(.22, .27), ringDir = Math.random() < .5 ? -1 : 1;
     parts = Array.from({ length: T.n }, (_, i) => {
       const el = document.createElement('div');
       el.className = 'fp' + (T.cls ? ' ' + T.cls : '');
@@ -113,7 +114,7 @@
         dir: ring ? ringDir : (Math.random() < .5 ? -1 : 1),
         r0: rnd(...T.r),
         k: ring ? ringK : rnd(.14, .28),
-        psi: ring ? ringPsi : rnd(-.28, .28),
+        psi: ring ? ringPsi : (Math.random() < .75 ? tiltSign : -tiltSign) * rnd(.25, .45),
         ph: rnd(0, TAU), ph2: rnd(0, TAU), ph3: rnd(0, TAU),
         delay: i * .07,
         spinV: rnd(25, 60) * (Math.random() < .5 ? -1 : 1),
@@ -172,10 +173,10 @@
       p.el.style.opacity = op.toFixed(3);
       if (doSpark && intro > .5) sparkAt(p.front ? front : back, x + rnd(-3, 3), y + rnd(-3, 3));
     }
-    if (running && !reduce) raf = requestAnimationFrame(frame);
+    if (running && fade > 0 && !reduce) raf = requestAnimationFrame(frame);
   }
 
-  function play() { if (!raf) raf = requestAnimationFrame(frame); }
+  function play() { if (!raf && fade > 0) raf = requestAnimationFrame(frame); }
   function show(name) {
     build(name);
     try { localStorage.setItem(KEY, name); } catch (e) {}
@@ -188,17 +189,25 @@
   const forced = new URLSearchParams(location.search).get('flair');
   let current = NAMES.includes(forced) ? forced : (() => { const pool = NAMES.filter(n => n !== last); return pool[Math.floor(Math.random() * pool.length)]; })();
 
+  // pick up the scroll fade if the page opened part-way down
+  if (typeof window.flairFade === 'number') { fade = window.flairFade; back.style.opacity = front.style.opacity = fade; }
   measure();
   addEventListener('resize', measure);
   const sec = document.getElementById('web') || head;
   running = true;
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(es => { running = es[0].isIntersecting && !document.hidden; if (running) play(); }).observe(sec);
+    new IntersectionObserver(es => { inView = es[0].isIntersecting; running = inView && !document.hidden; if (running) play(); }).observe(sec);
   }
-  document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) play(); });
+  document.addEventListener('visibilitychange', () => { running = inView && !document.hidden; if (running) play(); });
+  // as you scroll down, web.js fades the flair out and the portrait goes back to the plain logo
+  addEventListener('flairfade', e => {
+    const was = fade; fade = e.detail;
+    back.style.opacity = front.style.opacity = fade;
+    if (fade > 0 && was === 0) play();
+  });
 
   // tap or press Enter on her portrait for the next set
-  const next = () => { current = NAMES[(NAMES.indexOf(current) + 1) % NAMES.length]; show(current); };
+  const next = () => { if (fade === 0) return; current = NAMES[(NAMES.indexOf(current) + 1) % NAMES.length]; show(current); };
   head.addEventListener('click', next);
   head.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); next(); } });
 

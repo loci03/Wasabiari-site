@@ -7,7 +7,7 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const ease = t => 1 - Math.pow(1 - t, 3);
-  let W, H, portrait, headEnd, paths = [];
+  let W, H, portrait, headEnd, paths = [], lastFade = 1;
 
   // reveal order: head's children first, then grandchildren
   const depth = n => n.dataset.from === 'head' ? 0 : 1 + depth(byId[n.dataset.from]);
@@ -52,6 +52,9 @@
     if (tag) tag.style.opacity = 1 - clamp(p / 0.15);
     head.style.left = '50%'; head.style.top = '50%';
     hello.style.opacity = 1 - clamp(p / 0.15);
+    const fade = reduce ? 1 : 1 - clamp(p / 0.1);   // flair.js: animations fade out as you scroll down
+    window.flairFade = fade;
+    if (fade !== lastFade) { lastFade = fade; dispatchEvent(new CustomEvent('flairfade', { detail: fade })); }
     hint.style.opacity = 1 - clamp(p / 0.1);
     paths.forEach(path => {
       const n = path._node, t = ease(clamp((p - n._start) / 0.14));
