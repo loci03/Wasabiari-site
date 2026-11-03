@@ -19,6 +19,8 @@ header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:spac
 .brand small{display:block;font-size:10px;letter-spacing:.24em;color:var(--muted);font-weight:700}
 nav{display:flex;flex-wrap:wrap;gap:0 16px}
 nav a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:600;display:inline-block;padding:11px 0}
+@media (max-width:430px){nav{flex-wrap:nowrap;gap:0 12px}nav a{font-size:14px;white-space:nowrap}}
+@media (max-width:374px){nav{gap:0 9px}nav a{font-size:13px}}
 nav a.on,nav a:hover{color:var(--ink);text-decoration:underline;text-decoration-thickness:3px;text-decoration-color:var(--acc);text-underline-offset:5px}
 main{padding:40px 0 64px}
 h1,h2,h3{font-family:var(--hfont);font-weight:700}
@@ -101,12 +103,15 @@ HOME_PRE = open(os.path.join(os.path.dirname(__file__), "home-web.html")).read()
 
 # Ivan's structure (03:32Z 11-03): InkBleed / WASABI Entertainment (games) / Shop & Merch / Contact & Support.
 # About moved into Contact & Support (Ivan, 15:08Z 11-03); /about/ redirects to /support/#about.
+# Parked for now (Ivan, 16:04Z 11-03): add back to GAMES and tools/home-web.html to bring it back.
+PARKED = [
+    ("turner", "Turner", "Coming soon", "A clean, simple player for your own IPTV subscription: live channels, a TV guide and movies on your phone or TV."),
+]
 GAMES = [  # slug, name, status tag, blurb (from each project's earlier sessions/repos; Ivan can rewrite)
     ("micro-mayhem", "Micro Mayhem!", "App Store soon", "26 tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, shout HIDE!"),
     ("beat-stack", "Beat Stack", "Coming soon", "A block-stacking puzzle set to music: 19 themed levels, story battles, a shared leaderboard and head-to-head play."),
     ("for-the-waves", "For the Waves", "Coming soon", "A neon pixel wave racer. Carve across open water, hit ramps and rings, and outrun a hungry shark."),
     ("stryde-rider", "Stryde Rider", "Coming soon", "A cycling game for your exercise bike. Your pedaling drives the ride: race AI riders and chase your own ghost."),
-    ("turner", "Turner", "Coming soon", "A clean, simple player for your own IPTV subscription: live channels, a TV guide and movies on your phone or TV."),
 ]
 def tag(status):
     return f'<span class="tag{" live" if "App Store" in status else ""}">{status}</span>'
@@ -157,7 +162,7 @@ for slug, game, status, blurb in GAMES:
 {free}<a href="/{slug}/privacy/">Read the privacy policy</a>.</p>
 <h2>Need help?</h2><p>Found a bug or have an idea? <a href="/support/">Contact support</a>.</p>""", "/projects/")
     # Checked against the code 11-03: Micro Mayhem! (Games' STORE-FACTS) and For the Waves make no
-    # network calls; Beat Stack's Worker stores initials + scores only. Stryde Rider and Turner unchecked.
+    # network calls; Beat Stack's Worker stores initials + scores only. Stryde Rider unchecked.
     checked = slug in ("micro-mayhem", "for-the-waves")
     if slug == "micro-mayhem":
         priv = privacy(slug, game, "November 3, 2026", MIC_SECTION, draft=False)
