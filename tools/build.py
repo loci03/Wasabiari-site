@@ -45,6 +45,7 @@ a.card{text-decoration:none}a.card:hover{transform:translate(-2px,-2px);box-shad
 footer{border-top:3px solid var(--ink);color:var(--muted);font-size:14px;background:#fff}
 footer .wrap{padding-top:14px;padding-bottom:22px;display:flex;flex-wrap:wrap;gap:0 18px;align-items:center}
 footer a{color:var(--muted);display:inline-block;padding:8px 0}
+.gtag{font-family:var(--hfont);font-weight:700;font-size:clamp(22px,5vw,28px);color:var(--wasabi);margin:-4px 0 6px}
 .legal{max-width:680px}.legal h2{font-size:20px}
 """
 FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">'
@@ -103,12 +104,15 @@ HOME_PRE = open(os.path.join(os.path.dirname(__file__), "home-web.html")).read()
 
 # Ivan's structure (03:32Z 11-03): InkBleed / WASABI Entertainment (games) / Shop & Merch / Contact & Support.
 # About moved into Contact & Support (Ivan, 15:08Z 11-03); /about/ redirects to /support/#about.
+# Taglines shown under a game's name on its page (Micro Mayhem!: Ivan's App Store subtitle, 17:16Z 11-03)
+TAGLINES = {"micro-mayhem": "Tiny games. Huge mayhem."}
+
 # Parked for now (Ivan, 16:04Z 11-03): add back to GAMES and tools/home-web.html to bring it back.
 PARKED = [
     ("turner", "Turner", "Coming soon", "A clean, simple player for your own IPTV subscription: live channels, a TV guide and movies on your phone or TV."),
 ]
 GAMES = [  # slug, name, status tag, blurb (from each project's earlier sessions/repos; Ivan can rewrite)
-    ("micro-mayhem", "Micro Mayhem!", "App Store soon", "Tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, tap HIDE!"),
+    ("micro-mayhem", "Micro Mayhem!", "App Store soon", "Frantic little games, a few seconds each. Milk the cow, zip the babbler, tap HIDE!"),
     ("beat-stack", "Beat Stack", "Coming soon", "A block-stacking puzzle set to music: 19 themed levels, story battles, a shared leaderboard and head-to-head play."),
     ("for-the-waves", "For the Waves", "Coming soon", "A neon pixel wave racer. Carve across open water, hit ramps and rings, and outrun a hungry shark."),
     ("stryde-rider", "Stryde Rider", "Coming soon", "A cycling game for your exercise bike. Your pedaling drives the ride: race AI riders and chase your own ghost."),
@@ -157,7 +161,7 @@ for slug, game, status, blurb in GAMES:
             else '<h2>Free, no ads, no tracking</h2><p>The game is free and collects no personal data. ')
     page(f"/{slug}/", f"{game} · {BRAND}", f"""<div class="crumbs"><a href="/projects/">Projects</a> / <a href="/wasabi-entertainment/">{BRAND}</a> / {game}</div>
 {tag(status)}<h1>{game}</h1>
-<p class="lede">{blurb}</p>
+{f'<p class="gtag">{TAGLINES[slug]}</p>' if slug in TAGLINES else ""}<p class="lede">{blurb}</p>
 <p class="note">Screenshots{" and the App Store button" if "App Store" in status else ""} go here once the game is out.</p>
 {free}<a href="/{slug}/privacy/">Read the privacy policy</a>.</p>
 <h2>Need help?</h2><p>Found a bug or have an idea? <a href="/support/">Contact support</a>.</p>""", "/projects/")
