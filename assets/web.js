@@ -12,7 +12,8 @@
   // reveal order: head's children first, then grandchildren
   const depth = n => n.dataset.from === 'head' ? 0 : 1 + depth(byId[n.dataset.from]);
   const order = [...nodes].sort((a, b) => depth(a) - depth(b));
-  order.forEach((n, i) => n._start = 0.32 + i * 0.075);
+  const step = Math.min(0.075, 0.46 / Math.max(1, order.length - 1));
+  order.forEach((n, i) => n._start = 0.32 + i * step);
 
   function layout() {
     W = stage.clientWidth; H = stage.clientHeight; portrait = W < H;

@@ -22,3 +22,5 @@
 
 .tagline{position:absolute;left:0;right:0;top:calc(42% + min(36vw,26vh) + 22px + clamp(40px,9vw,58px));text-align:center;margin:0;color:var(--muted);font-size:16px}
 .node{min-height:44px;display:flex;flex-direction:column;justify-content:center}
+
+@media (max-width:480px){.node.game{max-width:116px;font-size:14px;padding:8px 9px;border-radius:15px}.node.game small{font-size:10.5px}}
