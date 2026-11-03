@@ -169,7 +169,6 @@ page("/inkbleed/", "InkBleed · coming soon", """<div class="crumbs"><a href="/p
 <span class="tag">Coming soon</span><h1>InkBleed</h1><p class="lede">A creative studio for comics, art, video and sound, running on open models you own.</p>
 <p>It's being built and tested at home first. Check back for news.</p>""", "/projects/")
 page("/shop/", "Shop & Merch · wasabiari", f"""<h1>Shop &amp; Merch</h1><p class="lede">Things I make at home in Boston, from 3D prints and art prints to greeting cards, comics and {BRAND} merch. New projects show up here as they&rsquo;re ready. The shop opens soon.</p>
-<p class="note">DRAFT: the first items, photos and prices come from Ivan.</p>
 <div class="grid">
 <div class="card shop"><span class="tag">Coming soon</span><h3>3D prints</h3><p>Figures, gifts and useful bits, printed to order on my own printer.</p></div>
 <div class="card shop"><span class="tag">Coming soon</span><h3>Art prints</h3><p>Prints of my illustrations and comic art, made in InkBleed.</p></div>
@@ -177,6 +176,7 @@ page("/shop/", "Shop & Merch · wasabiari", f"""<h1>Shop &amp; Merch</h1><p clas
 <div class="card shop"><span class="tag">Coming soon</span><h3>Comics</h3><p>Comics I write and draw in InkBleed, in print and digital.</p></div>
 <div class="card shop"><span class="tag">Coming soon</span><h3>Merch</h3><p>Stickers, shirts and more from the {BRAND} games.</p></div>
 </div>
+<h2>Paying</h2><p>Checkout runs on Stripe, so you can pay with Apple Pay or a card. I never see or store your card details.</p>
 <h2>Want something custom?</h2><p>A print with your name on it, a card set for an event, a one-off 3D print? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a> and tell me what you have in mind.</p>""", "/shop/")
 page("/about/", "About · wasabiari", """<h1>About</h1><p class="lede">I'm Ivan, a maker in Boston, Massachusetts.</p>
 <p>DRAFT: a few sentences from Ivan about himself and why he makes games and tools.</p>
