@@ -64,6 +64,11 @@ MIC_SECTION = """<h2>Microphone and speech recognition</h2><p>One level, Walk It
 <p>When you first play the level, iOS shows its standard speech recognition prompt, which mentions that speech data may be sent to Apple. Micro Mayhem! asks only for on-device recognition, so your audio stays on your iPhone.</p>
 <p>You can say no. If you do, a big HIDE button appears instead and the level plays the same way. You can change this any time in Settings &gt; Privacy &amp; Security &gt; Microphone and Speech Recognition.</p>"""
 
+EXTRA_PRIVACY = {
+    "stryde-rider": """<h2>Bluetooth and your bike</h2><p>Stryde Rider connects to your cadence sensor over Bluetooth to read how fast you pedal. That reading is used for the ride and stays on your device.</p>""",
+    "turner": """<h2>Your TV subscription</h2><p class="note">DRAFT: Turner signs in to the IPTV service you choose. This section needs to say where that login is kept and what the provider sees, once it's settled how Turner ships.</p>""",
+}
+
 ONLINE_NOTE = """<p class="note">DRAFT: Beat Stack has a shared leaderboard and head-to-head battles, so it does send some data, such as scores. This page needs to say exactly what is sent and kept before it goes public. I'll fill it in after checking the game's code.</p>"""
 
 def privacy(slug, game, updated="November 1, 2026", extra="", online=False):
@@ -90,12 +95,12 @@ def privacy(slug, game, updated="November 1, 2026", extra="", online=False):
 HOME_PRE = open(os.path.join(os.path.dirname(__file__), "home-web.html")).read()
 
 # Ivan's structure (03:32Z 11-03): InkBleed / WASABI Entertainment (games) / Shop & Merch / About / Contact & Support
-GAMES = [  # slug, name, status tag, blurb
-    ("micro-mayhem", "Micro Mayhem!", "App Store soon", "DRAFT: 26 tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, shout HIDE!"),
-    ("beat-stack", "Beat Stack", "Coming soon", "DRAFT: A music-packed block-stacking puzzle with 19 levels, a shared leaderboard and head-to-head battles."),
-    ("for-the-waves", "For the Waves", "Coming soon", "DRAFT: A neon pixel wave racer on the open water."),
-    ("stryde-rider", "Stryde Rider", "Coming soon", "DRAFT: A bike game you ride for real, pedaling your own indoor trainer."),
-    ("turner", "Turner", "Coming soon", "DRAFT: one line about Turner, from Ivan."),
+GAMES = [  # slug, name, status tag, blurb (from each project's earlier sessions/repos; Ivan can rewrite)
+    ("micro-mayhem", "Micro Mayhem!", "App Store soon", "26 tiny, frantic games, a few seconds each. Milk the cow, zip the babbler, shout HIDE!"),
+    ("beat-stack", "Beat Stack", "Coming soon", "A block-stacking puzzle set to music: 19 themed levels, story battles, a shared leaderboard and head-to-head play."),
+    ("for-the-waves", "For the Waves", "Coming soon", "A neon pixel wave racer. Carve across open water, hit ramps and rings, and outrun a hungry shark."),
+    ("stryde-rider", "Stryde Rider", "Coming soon", "A cycling game for your exercise bike. Your pedaling drives the ride: race AI riders and chase your own ghost."),
+    ("turner", "Turner", "Coming soon", "A clean, simple player for your own IPTV subscription: live channels, a TV guide and movies on your phone or TV."),
 ]
 def tag(status):
     return f'<span class="tag{" live" if "App Store" in status else ""}">{status}</span>'
@@ -108,7 +113,7 @@ def game_cards(privacy_links=False):
             out.append(f'<a class="card proj" href="/{slug}/">{tag(status)}<h3>{name}</h3><p>{blurb}</p></a>')
     return "\n".join(out)
 INK_CARD = '<a class="card" href="/inkbleed/"><span class="tag">Coming soon</span><h3>InkBleed</h3><p>A creative studio for comics, art, video and sound.</p></a>'
-SHOP_CARD = '<a class="card shop" href="/shop/"><span class="tag">Opening soon</span><h3>Shop &amp; Merch</h3><p>3D prints, art prints, greeting cards and merch I make at home.</p></a>'
+SHOP_CARD = '<a class="card shop" href="/shop/"><span class="tag">Opening soon</span><h3>Shop &amp; Merch</h3><p>3D prints, art prints, cards, comics and merch from my projects.</p></a>'
 
 page("/", f"wasabiari · {BRAND}", f"""<h2 style="margin-top:0">Everything in one place</h2>
 <p class="lede">Home of {BRAND} and Ivan's other projects, made in Boston.</p>
@@ -147,18 +152,21 @@ for slug, game, status, blurb in GAMES:
 <h2>Need help?</h2><p>Found a bug or have an idea? <a href="/support/">Contact support</a>.</p>""", "/projects/")
     if slug == "micro-mayhem":
         priv = privacy(slug, game, "November 3, 2026", MIC_SECTION)
+    elif slug in EXTRA_PRIVACY:
+        priv = privacy(slug, game, "November 3, 2026", EXTRA_PRIVACY[slug])
     else:
         priv = privacy(slug, game, online=online)
     page(f"/{slug}/privacy/", f"{game} privacy policy", priv, "/projects/")
 page("/inkbleed/", "InkBleed · coming soon", """<div class="crumbs"><a href="/projects/">Projects</a> / InkBleed</div>
 <span class="tag">Coming soon</span><h1>InkBleed</h1><p class="lede">A creative studio for comics, art, video and sound, running on open models you own.</p>
 <p>It's being built and tested at home first. Check back for news.</p>""", "/projects/")
-page("/shop/", "Shop & Merch · wasabiari", f"""<h1>Shop &amp; Merch</h1><p class="lede">Things I make at home in Boston: 3D prints, art prints, greeting cards and {BRAND} merch. The shop opens soon.</p>
+page("/shop/", "Shop & Merch · wasabiari", f"""<h1>Shop &amp; Merch</h1><p class="lede">Things I make at home in Boston, from 3D prints and art prints to greeting cards, comics and {BRAND} merch. New projects show up here as they&rsquo;re ready. The shop opens soon.</p>
 <p class="note">DRAFT: the first items, photos and prices come from Ivan.</p>
 <div class="grid">
 <div class="card shop"><span class="tag">Coming soon</span><h3>3D prints</h3><p>Figures, gifts and useful bits, printed to order on my own printer.</p></div>
 <div class="card shop"><span class="tag">Coming soon</span><h3>Art prints</h3><p>Prints of my illustrations and comic art, made in InkBleed.</p></div>
 <div class="card shop"><span class="tag">Coming soon</span><h3>Greeting cards</h3><p>Card sets I design for birthdays, holidays and just because.</p></div>
+<div class="card shop"><span class="tag">Coming soon</span><h3>Comics</h3><p>Comics I write and draw in InkBleed, in print and digital.</p></div>
 <div class="card shop"><span class="tag">Coming soon</span><h3>Merch</h3><p>Stickers, shirts and more from the {BRAND} games.</p></div>
 </div>
 <h2>Want something custom?</h2><p>A print with your name on it, a card set for an event, a one-off 3D print? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a> and tell me what you have in mind.</p>""", "/shop/")
