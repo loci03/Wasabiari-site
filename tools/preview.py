@@ -6,7 +6,7 @@ Then publish OUT_DIR/index.html with every other file under OUT_DIR as supportin
 import os, re, shutil, sys
 OUT = sys.argv[1]
 for root, dirs, fs in os.walk("."):
-    dirs[:] = [d for d in dirs if d not in (".git", "tools")]
+    dirs[:] = [d for d in dirs if d not in (".git", "tools", "docs")]
     for f in fs:
         if f in ("CNAME", ".nojekyll"):
             continue

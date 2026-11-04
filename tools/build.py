@@ -140,7 +140,7 @@ page("/", f"wasabiari · {BRAND}", f"""<h2 style="margin-top:0">Everything in on
 <div class="grid">
 {game_cards(True)}
 </div>
-<p class="links"><a href="/support/">Contact &amp; Support</a><a href="/support/#about">About</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><script defer src="/assets/web.js"></script><script defer src="/assets/flair.js"></script>')
+<p class="links"><a href="/support/">Contact &amp; Support</a><a href="/support/#about">About</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><link rel="stylesheet" href="/assets/flair.css"><script defer src="/assets/web.js"></script><script defer src="/assets/flair.js"></script>')
 page("/projects/", "Projects · wasabiari", f"""<h1>Projects</h1><p class="lede">Everything I'm building, in one place.</p>
 <div class="grid">
 {INK_CARD}
@@ -155,16 +155,18 @@ page("/wasabi-entertainment/", BRAND, f"""<div class="crumbs"><a href="/projects
 <h1>{BRAND}</h1><p class="lede">Small games with big personality, made in Boston. Named after Wasabi.</p><div class="grid">
 {game_cards()}
 </div>""", "/projects/")
+GAME_BODY, PRIV_BODY = {}, {}
 for slug, game, status, blurb in GAMES:
     online = slug == "beat-stack"
     free = ('<h2>Free, no ads</h2><p>The game is free, with a shared leaderboard and online battles. ' if online
             else '<h2>Free, no ads, no tracking</h2><p>The game is free and collects no personal data. ')
-    page(f"/{slug}/", f"{game} · {BRAND}", f"""<div class="crumbs"><a href="/projects/">Projects</a> / <a href="/wasabi-entertainment/">{BRAND}</a> / {game}</div>
+    GAME_BODY[slug] = f"""<div class="crumbs"><a href="/projects/">Projects</a> / <a href="/wasabi-entertainment/">{BRAND}</a> / {game}</div>
 {tag(status)}<h1>{game}</h1>
 {f'<p class="gtag">{TAGLINES[slug]}</p>' if slug in TAGLINES else ""}<p class="lede">{blurb}</p>
 <p class="note">Screenshots{" and the App Store button" if "App Store" in status else ""} go here once the game is out.</p>
 {free}<a href="/{slug}/privacy/">Read the privacy policy</a>.</p>
-<h2>Need help?</h2><p>Found a bug or have an idea? <a href="/support/">Contact support</a>.</p>""", "/projects/")
+<h2>Need help?</h2><p>Found a bug or have an idea? <a href="/support/">Contact support</a>.</p>"""
+    page(f"/{slug}/", f"{game} · {BRAND}", GAME_BODY[slug], "/projects/")
     # Checked against the code 11-03: Micro Mayhem! (Games' STORE-FACTS) and For the Waves make no
     # network calls; Beat Stack's Worker stores initials + scores only. Stryde Rider unchecked.
     checked = slug in ("micro-mayhem", "for-the-waves")
@@ -174,6 +176,7 @@ for slug, game, status, blurb in GAMES:
         priv = privacy(slug, game, "November 3, 2026", EXTRA_PRIVACY[slug])
     else:
         priv = privacy(slug, game, "November 3, 2026", online=online, draft=not checked)
+    PRIV_BODY[slug] = priv
     page(f"/{slug}/privacy/", f"{game} privacy policy", priv, "/projects/")
 page("/inkbleed/", "InkBleed · coming soon", """<div class="crumbs"><a href="/projects/">Projects</a> / InkBleed</div>
 <span class="tag">Coming soon</span><h1>InkBleed</h1><p class="lede">A creative studio for comics, art, video and sound, running on open models you own.</p>
@@ -189,13 +192,14 @@ page("/shop/", "Shop & Merch · wasabiari", f"""<h1>Shop &amp; Merch</h1><p clas
 <h2>Paying</h2><p>Checkout runs on Stripe, so you can pay with Apple Pay or a card. I never see or store your card details.</p>
 <h2>Want something custom?</h2><p>A print with your name on it, a card set for an event, a one-off 3D print? Email <a href="mailto:support@wasabiari.com">support@wasabiari.com</a> and tell me what you have in mind.</p>""", "/shop/")
 PRIV_LIST = " · ".join(f'<a href="/{slug}/privacy/">{name}</a>' for slug, name, _, _ in GAMES)
-page("/support/", "Contact & Support · wasabiari", f"""<h1>Contact &amp; Support</h1><p class="lede">Questions, bugs, or ideas about any of my games or projects? I read every message.</p>
+SUPPORT_BODY = f"""<h1>Contact &amp; Support</h1><p class="lede">Questions, bugs, or ideas about any of my games or projects? I read every message.</p>
 <a class="btn" href="mailto:support@wasabiari.com">Email support@wasabiari.com</a>
 <h2>When you write about a bug</h2><p>Tell me which game, what you were doing, and your iPhone model. A screenshot helps a lot.</p>
 <h2 id="privacy">Privacy policies</h2><p>{PRIV_LIST}</p>
 <p>I usually reply within a few days.</p>
 <h2 id="about">About</h2><p>I'm Ivan, a maker in Boston, Massachusetts. I make games, art, 3D prints and other projects at home, first for family and friends, and share the ones that turn out well here.</p>
-<p>The name wasabiari comes from Wasabi, Ariel's nickname, plus the first three letters of her name.</p>""", "/support/")
+<p>The name wasabiari comes from Wasabi, Ariel's nickname, plus the first three letters of her name.</p>"""
+page("/support/", "Contact & Support · wasabiari", SUPPORT_BODY, "/support/")
 # old /about/ link: send it to the About section on Contact & Support
 os.makedirs(os.path.join(OUT, "about"), exist_ok=True)
 open(os.path.join(OUT, "about", "index.html"), "w").write('<!doctype html><meta charset=utf-8><title>About · wasabiari</title><meta http-equiv="refresh" content="0; url=/support/#about"><link rel="canonical" href="/support/#about"><a href="/support/#about">About</a>')
@@ -203,3 +207,54 @@ os.makedirs(os.path.join(OUT,"assets"), exist_ok=True)
 open(os.path.join(OUT,"assets/style.css"),"w").write(CSS)
 open(os.path.join(OUT,"CNAME"),"w").write("wasabiari.com\n")
 open(os.path.join(OUT,"404.html"),"w").write('<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href="/assets/style.css"><main><div class=wrap><h1>Page not found</h1><p><a href="/">Back home</a></p></div></main>')
+
+# ---------------------------------------------------------------------------
+# Coming-soon site (Ivan, 00:01Z 11-04): "go live with the logo and slogan, and under it
+# coming soon". It is built into docs/, and GitHub Pages serves main /docs, so the full site
+# above stays in development. It also carries the pages the App Store needs: Micro Mayhem!,
+# its privacy policy, and Contact & Support. To launch the full site, point Pages at the root.
+import re, shutil
+FULL_OUT = OUT
+OUT = os.path.join(FULL_OUT, "docs")
+NAV = [("/support/", "Contact & Support")]
+SOON_GAMES = ["micro-mayhem"]
+if os.path.isdir(OUT):
+    shutil.rmtree(OUT)
+os.makedirs(os.path.join(OUT, "assets"))
+for f in ["style.css", "flair.css", "flair.js", "ari-face.jpg", "ari-head.jpg", "ari-head-cut.webp"]:
+    shutil.copy(os.path.join(FULL_OUT, "assets", f), os.path.join(OUT, "assets", f))
+for slug in SOON_GAMES:
+    name = next(g for s_, g, _, _ in GAMES if s_ == slug)
+    page(f"/{slug}/", f"{name} · {BRAND}", re.sub(r'<div class="crumbs">.*?</div>\n', "", GAME_BODY[slug], count=1, flags=re.S))
+    page(f"/{slug}/privacy/", f"{name} privacy policy", PRIV_BODY[slug])
+soon_priv = " · ".join(f'<a href="/{s_}/privacy/">{g}</a>' for s_, g, _, _ in GAMES if s_ in SOON_GAMES)
+page("/support/", "Contact & Support · wasabiari", SUPPORT_BODY.replace(PRIV_LIST, soon_priv), "/support/")
+SOON_CSS = """body.soon{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
+.splash{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 16px 40px}
+.splash .head{position:relative;width:min(72vw,46vh);aspect-ratio:1;border-radius:50%;overflow:hidden;background:var(--panel);margin-bottom:38px;
+  box-shadow:0 0 0 8px #fff,0 0 0 12px var(--ink),10px 12px 0 12px var(--lilac)}
+.splash .head>img:first-child{width:100%;height:100%;object-fit:cover;display:block}
+.splash h1{font-family:var(--hfont);font-weight:700;font-size:clamp(40px,10vw,60px);letter-spacing:-.02em;line-height:1;margin:0}
+.splash h1 span,.splash .tagline span{color:var(--wasabi)}
+.splash .tagline{color:var(--muted);font-size:clamp(17px,4.4vw,21px);margin:12px 0 26px}
+.splash .tagline span{font-weight:700}
+.soon-tag{display:inline-block;font-family:var(--hfont);font-weight:700;font-size:clamp(20px,5.4vw,26px);background:var(--acc);border:3px solid var(--ink);
+  border-radius:999px;padding:8px 26px;box-shadow:4px 4px 0 var(--ink);margin:0;transform:rotate(-2deg)}"""
+open(os.path.join(OUT, "index.html"), "w").write(f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>wasabiari · coming soon</title><meta name="description" content="Games, art and other projects from {BRAND}, made in Boston. Coming soon.">
+{FONTS}<link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/assets/flair.css"><link rel="icon" href="/assets/ari-face.jpg"><link rel="apple-touch-icon" href="/assets/ari-face.jpg">
+<style>{SOON_CSS}</style><script defer src="/assets/flair.js"></script></head>
+<body class="soon"><main class="splash">
+<div class="head" id="head" role="button" tabindex="0" aria-label="Ariel. Tap for a new surprise"><img src="/assets/ari-head.jpg" alt="Cartoon portrait of Ariel">
+<div class="flair" id="flair-back" aria-hidden="true"></div><img class="cut" src="/assets/ari-head-cut.webp" alt="" style="left:17.625%;top:10.125%;width:71.25%"><div class="flair" id="flair-front" aria-hidden="true"></div></div>
+<h1>wasabi<span>ari</span></h1>
+<p class="tagline">Made with love and a dash of <span>wasabi</span></p>
+<p class="soon-tag">Coming soon</p>
+</main>
+<footer><div class="wrap"><span>&copy; 2026 {BRAND} &middot; Boston, MA</span><a href="/support/">Contact &amp; Support</a><a href="/support/#privacy">Privacy policies</a></div></footer>
+</body></html>
+""")
+open(os.path.join(OUT, "CNAME"), "w").write("wasabiari.com\n")
+open(os.path.join(OUT, ".nojekyll"), "w").write("")
+shutil.copy(os.path.join(FULL_OUT, "404.html"), os.path.join(OUT, "404.html"))
