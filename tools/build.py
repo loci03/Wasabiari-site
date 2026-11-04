@@ -140,7 +140,7 @@ page("/", f"wasabiari · {BRAND}", f"""<h2 style="margin-top:0">Everything in on
 <div class="grid">
 {game_cards(True)}
 </div>
-<p class="links"><a href="/support/">Contact &amp; Support</a><a href="/support/#about">About</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><link rel="stylesheet" href="/assets/flair.css"><script defer src="/assets/web.js"></script><script defer src="/assets/flair.js"></script>')
+<p class="links"><a href="/support/">Contact &amp; Support</a><a href="/support/#about">About</a></p>""", "/", pre=HOME_PRE, extra_head='<link rel="stylesheet" href="/assets/web.css"><link rel="stylesheet" href="/assets/flair.css"><script defer src="/assets/web.js"></script><script defer src="/assets/flair-sets.js"></script><script defer src="/assets/flair.js"></script>')
 page("/projects/", "Projects · wasabiari", f"""<h1>Projects</h1><p class="lede">Everything I'm building, in one place.</p>
 <div class="grid">
 {INK_CARD}
@@ -221,7 +221,7 @@ SOON_GAMES = ["micro-mayhem"]
 if os.path.isdir(OUT):
     shutil.rmtree(OUT)
 os.makedirs(os.path.join(OUT, "assets"))
-for f in ["style.css", "flair.css", "flair.js", "ari-face.jpg", "ari-head.jpg", "ari-head-cut.webp"]:
+for f in ["style.css", "flair.css", "flair-sets.js", "flair.js", "ari-face.jpg", "ari-head.jpg", "ari-head-cut.webp"]:
     shutil.copy(os.path.join(FULL_OUT, "assets", f), os.path.join(OUT, "assets", f))
 for slug in SOON_GAMES:
     name = next(g for s_, g, _, _ in GAMES if s_ == slug)
@@ -244,7 +244,7 @@ open(os.path.join(OUT, "index.html"), "w").write(f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>wasabiari · coming soon</title><meta name="description" content="Games, art and other projects from {BRAND}, made in Boston. Coming soon.">
 {FONTS}<link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/assets/flair.css"><link rel="icon" href="/assets/ari-face.jpg"><link rel="apple-touch-icon" href="/assets/ari-face.jpg">
-<style>{SOON_CSS}</style><script defer src="/assets/flair.js"></script></head>
+<style>{SOON_CSS}</style><script defer src="/assets/flair-sets.js"></script><script defer src="/assets/flair.js"></script></head>
 <body class="soon"><main class="splash">
 <div class="head" id="head" role="button" tabindex="0" aria-label="Ariel. Tap for a new surprise"><img src="/assets/ari-head.jpg" alt="Cartoon portrait of Ariel">
 <div class="flair" id="flair-back" aria-hidden="true"></div><img class="cut" src="/assets/ari-head-cut.webp" alt="" style="left:17.625%;top:10.125%;width:71.25%"><div class="flair" id="flair-front" aria-hidden="true"></div></div>
