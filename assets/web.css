@@ -15,9 +15,16 @@
   padding:10px 14px;border-radius:18px;border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
 .node small{display:block;font-family:var(--font);font-weight:600;font-size:12px;color:#40364c;margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
 .node.proj{background:var(--lilac)}
+.node.shop{background:#eaf6d9}
 .node.big{background:var(--acc);color:var(--ink);max-width:150px}
 .node:hover,.node:focus-visible{box-shadow:5px 5px 0 var(--ink)}
 @media (prefers-reduced-motion: reduce){.web{height:auto}.stage{position:relative;height:100svh}.hint{display:none}}
 
 .tagline{position:absolute;left:0;right:0;top:calc(42% + min(36vw,26vh) + 22px + clamp(40px,9vw,58px));text-align:center;margin:0;color:var(--muted);font-size:16px}
 .node{min-height:44px;display:flex;flex-direction:column;justify-content:center}
+
+@media (max-width:480px){.node.game{max-width:116px;font-size:14px;padding:8px 9px;border-radius:15px}.node.game small{font-size:10.5px}}
+
+.hello,.tagline{z-index:3}
+.tagline span{color:var(--wasabi);font-weight:700}
+.node{width:max-content}
