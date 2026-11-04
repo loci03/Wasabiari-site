@@ -64,7 +64,7 @@ def page(path, title, body, active="/", pre="", extra_head=""):
     open(os.path.join(d, "index.html"), "w").write(html)
 
 MIC_SECTION = """<h2>Microphone and speech recognition (optional)</h2><p>Micro Mayhem! is played by touch. The microphone is used only if you turn on the optional Voice levels setting, which is off by default. Until you do, the game never asks for microphone or speech recognition permission and never listens.</p>
-<p>With Voice levels on, the microphone is used only during voice levels such as Walk It and Sing It, from the level&rsquo;s countdown to its result screen. It stops when you pause, leave the app, get interrupted, or move on to the next level. Sing It goes by how loud you are. Walk It also listens for the word &ldquo;HIDE!&rdquo; with Apple&rsquo;s speech recognition, set to run on your iPhone. If your iPhone can&rsquo;t recognize speech on the device, it doesn&rsquo;t run, and a loud shout still counts. Speech recognition may also run during other voice levels, but only Walk It uses it.</p>
+<p>With Voice levels on, the microphone is used only during voice levels such as Walk It and Sing It, from the level&rsquo;s countdown to its result screen. It stops when you pause, leave the app, get interrupted, or move on to the next level. Sing It goes by how loud you are. Walk It also listens for the word &ldquo;HIDE!&rdquo; with Apple&rsquo;s speech recognition, set to run on your iPhone. If your iPhone can&rsquo;t recognize speech on the device, it doesn&rsquo;t run, and a loud shout still counts. Speech recognition runs only in Walk It, never in other levels.</p>
 <p>All of this happens on your iPhone. The game never records or saves audio, keeps no logs, and has no network code, so your voice is never sent to us or anyone else. Only a loudness level and a &ldquo;heard it&rdquo; signal reach the game, never audio or text.</p>
 <p>iOS shows its standard speech recognition prompt, which says speech data may be sent to Apple. Micro Mayhem! asks iOS to recognize speech on your iPhone only, but how iOS handles it is up to Apple. You can turn Voice levels off at any time, and change these permissions in Settings &gt; Privacy &amp; Security &gt; Microphone and Speech Recognition.</p>"""
 
@@ -172,7 +172,7 @@ for slug, game, status, blurb in GAMES:
     # network calls; Beat Stack's Worker stores initials + scores only. Stryde Rider unchecked.
     checked = slug in ("micro-mayhem", "for-the-waves")
     if slug == "micro-mayhem":
-        priv = privacy(slug, game, "November 3, 2026", MIC_SECTION, draft=False)
+        priv = privacy(slug, game, "November 4, 2026", MIC_SECTION, draft=False)
     elif slug in EXTRA_PRIVACY:
         priv = privacy(slug, game, "November 3, 2026", EXTRA_PRIVACY[slug])
     else:
