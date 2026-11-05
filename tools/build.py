@@ -222,7 +222,7 @@ SOON_GAMES = ["micro-mayhem"]
 if os.path.isdir(OUT):
     shutil.rmtree(OUT)
 os.makedirs(os.path.join(OUT, "assets"))
-for f in ["style.css", "flair.css", "flair-sets.js", "flair.js", "ari-face.jpg", "ari-head.jpg", "ari-head-cut.webp"]:
+for f in ["style.css", "flair.css", "flair-sets.js", "flair.js", "soon-tag.js", "ari-face.jpg", "ari-head.jpg", "ari-head-cut.webp"]:
     shutil.copy(os.path.join(FULL_OUT, "assets", f), os.path.join(OUT, "assets", f))
 for slug in SOON_GAMES:
     name = next(g for s_, g, _, _ in GAMES if s_ == slug)
@@ -240,18 +240,33 @@ SOON_CSS = """body.soon{min-height:100vh;min-height:100svh;display:flex;flex-dir
 .splash .tagline{color:var(--muted);font-size:clamp(17px,4.4vw,21px);margin:12px 0 26px}
 .splash .tagline span{font-weight:700}
 .soon-tag{display:inline-block;font-family:var(--hfont);font-weight:700;font-size:clamp(20px,5.4vw,26px);background:var(--acc);border:3px solid var(--ink);
-  border-radius:999px;padding:8px 26px;box-shadow:4px 4px 0 var(--ink);margin:0;transform:rotate(-2deg)}"""
+  border-radius:999px;padding:8px 26px;box-shadow:4px 4px 0 var(--ink);margin:0;transform:rotate(-2deg);white-space:nowrap;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+/* Spin the C (fast spins change its colour), pull the n about (Ivan, 11-05); assets/soon-tag.js does the moving. */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.soon-tag .tc,.soon-tag .tw,.soon-tag .tn{display:inline-block;position:relative}
+.soon-tag .tc{cursor:pointer;touch-action:manipulation}
+.soon-tag .tc::after{content:"";position:absolute;inset:-12px -3px -12px -24px}
+.soon-tag .tw{cursor:grab;touch-action:none}
+.soon-tag .tw.drag{cursor:grabbing}
+.soon-tag .tw::after{content:"";position:absolute;inset:-12px -28px -12px -3px}
+.soon-tag .tn>span{position:absolute;left:0;top:0}
+.soon-tag .tn>span:first-child{position:static;visibility:hidden}
+.soon-tag .nk{display:inline-block;width:1px;position:relative}
+.soon-tag .nk>svg{position:absolute;left:0;top:0;overflow:visible;fill:currentColor}
+.soon-tag .tc.rainbow{background:linear-gradient(100deg,#ff3b30 15%,#ff9500 30%,#ffd60a 45%,#34c759 58%,#0a84ff 72%,#bf5af2 88%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;-webkit-text-stroke:.035em #1b1b1b}"""
 open(os.path.join(OUT, "index.html"), "w").write(f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>wasabiari · coming soon</title><meta name="description" content="Games, art and other projects from {BRAND}, made in Boston. Coming soon.">
 {FONTS}<link rel="stylesheet" href="/assets/style.css"><link rel="stylesheet" href="/assets/flair.css"><link rel="icon" href="/assets/ari-face.jpg"><link rel="apple-touch-icon" href="/assets/ari-face.jpg">
-<style>{SOON_CSS}</style><script defer src="/assets/flair-sets.js"></script><script defer src="/assets/flair.js"></script></head>
+<style>{SOON_CSS}</style><script defer src="/assets/flair-sets.js"></script><script defer src="/assets/flair.js"></script><script defer src="/assets/soon-tag.js"></script></head>
 <body class="soon"><main class="splash">
 <div class="head" id="head" role="button" tabindex="0" aria-label="Ariel. Tap for a new surprise"><img src="/assets/ari-head.jpg" alt="Cartoon portrait of Ariel">
 <div class="flair" id="flair-back" aria-hidden="true"></div><img class="cut" src="/assets/ari-head-cut.webp" alt="" style="left:17.625%;top:10.125%;width:71.25%"><div class="flair" id="flair-front" aria-hidden="true"></div></div>
 <h1>wasabi<span>ari</span></h1>
 <p class="tagline">Made with love and a dash of <span>wasabi</span></p>
-<p class="soon-tag">Coming soon</p>
+<p class="soon-tag" id="soon-tag"><span class="sr">Coming soon</span><span aria-hidden="true"><span class="tc">C</span>oming <span class="tw">soo<span class="tn"><span>n</span><span>n</span><span class="tb"><span class="nk"><svg width="1" height="1" focusable="false"><path/></svg></span></span><span>n</span></span></span></span></p>
 </main>
 <footer><div class="wrap"><span>&copy; 2026 {BRAND} &middot; Boston, MA</span><a href="/support/">Contact &amp; Support</a><a href="/support/#privacy">Privacy policies</a></div></footer>
 </body></html>
